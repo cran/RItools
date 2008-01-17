@@ -21,17 +21,21 @@ print.xbal <- function (x, which.strata=dimnames(x$results)[["strata"]],
     ##                                     }
 
     theresults <- x$results
-    if("overall" %in% names(x)) {
+    if("overall" %in% names(x)) { ##Extract the omnibus chisquared test from the xbal object...
       theoverall <- x$overall
     } else {
-      theoverall<-NULL
+      theoverall<-NULL ##..or set it to NULL if it does not exist.
     }
-
-    ##Summarize the output array as a flat contingency table
-    if (length(theresults) == 0) {
+ 
+    if (length(theresults) == 0 & is.null(theoverall)) {
       stop("There is a problem. Probably all of the variables (",
           all.vars(formula(x)),
           ") are constants within strata. Or else there is some other problem, try debug(RItools:::xBalance) to see what might be going on.")
+    }
+
+    if(length(theresults)==0 & !is.null(theoverall)){##The user has requested only the omnibus test and not the tests for the individual variables
+      theresults<-NULL
+      thevartab<-NULL
     }
     
     signifier <- function(data) {
@@ -43,11 +47,11 @@ print.xbal <- function (x, which.strata=dimnames(x$results)[["strata"]],
         symbols = c("***", "** ", "*  ", ".  ", "   "))
     }
     
-    ftabler <- function(data) {
+    ftabler <- function(data) {   ##Summarize the variable-by-variable output array as a flat contingency table
       ftable(data, col.vars=c("strata","stat"),row.vars=c("vars"))
     }
     
-    if(show.signif.stars & !show.pvals) {
+    if(show.signif.stars & !show.pvals & !is.null(theresults)) {
       
       Signif <- signifier(theresults[,"p",which.strata,drop=FALSE])
 
@@ -81,9 +85,8 @@ print.xbal <- function (x, which.strata=dimnames(x$results)[["strata"]],
               " " = format(Signif[which.vars,,x]))
           })
       }
-
     }
-    if(show.pvals&("p"%in% dimnames(theresults)[["stat"]])) {
+    if(show.pvals & ("p" %in% dimnames(theresults)[["stat"]]) & !is.null(theresults)) {
       if(horizontal){
         theftab <- ftabler(
           theresults[which.vars,which.stats,which.strata,drop=FALSE])
@@ -98,9 +101,9 @@ print.xbal <- function (x, which.strata=dimnames(x$results)[["strata"]],
       }
     }
     
-    if(show.pvals&!("p"%in% dimnames(theresults)[["stat"]])) { 
-      stop("You need to request p-values when calling xBalance.")
-    } ##irrelevant now.
+    ##if(show.pvals&!("p"%in% dimnames(theresults)[["stat"]])& !is.null(theresults)) { 
+    ##  stop("You need to request p-values when calling xBalance.")
+    ##} ##irrelevant now.
 
    if (!is.null(theoverall)) {
      nc <- length(theresults)/2
@@ -122,12 +125,14 @@ print.xbal <- function (x, which.strata=dimnames(x$results)[["strata"]],
    
   if(printme) {
    ## RItools:::print.ftable(thevartab,justify.labels="center",justify.data="right") ##doesn't seem to help the alignment problem
-    print(thevartab)
+    if(!is.null(theresults)){ print(thevartab) }
     if(!is.null(theoverall) && print.overall){
       cat("---Overall Test---\n")
       print(theoveralltab)
       if(show.signif.stars&!show.pvals){
-        cat("---\nSignif. codes: ", attr(Signif, "legend"), "\n")
+        if(!is.null(theresults)){thelegend<-attr(Signif, "legend")} ##if we are showing thevartab use the legend from that object
+        if(is.null(theresults) & !is.null(theoverall)){thelegend<-attr(ChiSignif,"legend")} ##use legend from the overall object if only showing that one
+        cat("---\nSignif. codes: ", thelegend, "\n")
       }
     }
     ##cat(paste("n = ", n, ", k = ", k,

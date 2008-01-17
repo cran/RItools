@@ -64,7 +64,7 @@ ssvar <- apply(dv*tmat*tmat, 2, sum)
 
   if ('z.scores' %in% report) ans['z'] <- ifelse(ssvar<=.Machine$double.eps,0,
                                                  ssn/sqrt(ssvar))
- ## if ('p.values' %in% report)  ##always produce a pvalue to use to create signif stars.
+  if (any(c("adj.means","adj.mean.diffs","std.diffs","z.scores","p.values") %in% report))  ##always produce a pvalue to use to create signif stars.
     ans['p'] <- ifelse(ssvar<=.Machine$double.eps,0,
                        2*pnorm(abs(ssn/sqrt(ssvar)),lower=FALSE))
 
@@ -72,7 +72,7 @@ if ("chisquare.test"%in%report)
   {
       pst.svd <- svd(tmat*sqrt(dv))
       Positive <- pst.svd$d > max(sqrt(.Machine$double.eps)*pst.svd$d[1], 0)
-      Positive[is.na(Positive)]<-FALSE # JB Note: Can we image a situation in which we dont want to do this? 
+      Positive[is.na(Positive)]<-FALSE # JB Note: Can we imagine a situation in which we dont want to do this? 
       if (all(Positive)) 
         {ytl <- pst.svd$v * 
            rep(1/pst.svd$d, rep(dim(mm)[2], length(pst.svd$d)))
