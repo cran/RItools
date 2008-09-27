@@ -1,0 +1,18 @@
+* Add capability to use simulation to assess coverage of confidence intervals for small and intermediate sample sizes.
+
+* Add capability to attribute effects.
+
+* Adapt xBalance() to handle clusters 2006-07-08
+it's actually very easy.  As long as you're working with totals, no adjustment is needed to get right stat'l significance.  This gives differences (using notation of Hansen & Bowers 2008, balance paper) 
+$$(\sum k_b^{-1})  \sum_bk_b^{-1} [Z^t_bx_b/n_{tb} - (1-Z_b)^tx_b/(n_b-n_{tb})] =
+   (\sum k_b^{-1})  \sum_b \bar{m}_b/k_b [Z^t_bx_b/m_{tb} - (1-Z_b)^tx_b/(m_b-m_{tb})], $$
+whereas what you wanted, according to same paper, was (*)
+$$
+  (\sum m_b/k_b)  \sum_b \bar{m}_b/k_b [Z^t_bx_b/m_{tb} - (1-Z_b)^tx_b/(m_b-m_{tb})] . $$
+
+Dealing with the standardized difference-analogue we report is trickier.  One way to think about it is that one is doing an individual-level inverse regression, 
+X ~Z + stratum, 
+with a block-diagonal covariance structure specifying that Z's are perfectly correlated w/in clusters.  This is the same as a regression of cluster totals of X's on cluster totals of Z's.  But if we were instead of regression on cluster totals of Z's, to regress on stratum-mean-cluster-size*Z, then we'd end up with (*) above.
+* Add examples to sumStatOMinusE.Rd. 
+
+
