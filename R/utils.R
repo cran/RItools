@@ -6,6 +6,15 @@ formula.xbal<-function(x,...){
   attr(x,"fmla")
 }
 
+# ============================================================================
+# = withOptions helper provides a safe way to temporarily override options() =
+# ============================================================================
+withOptions <- function(optionsToChange, fun) {
+  oldOpts <- options()
+  do.call(options, optionsToChange)
+  tryCatch(fun(), finally = do.call(options, oldOpts))
+}
+
 ##Our own version of these to handle the signif stars.
 ###print.ftable<-function (x, digits = getOption("digits"), ...) {
 ###  write.ftable(x, quote = FALSE, digits = digits)
