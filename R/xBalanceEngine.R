@@ -49,7 +49,7 @@ xBalanceEngine <- function(ss,zz,mm,report, swt, s.p, normalize.weights,zzname)
     {
   postwt0 <- unsplit(swt$sweights/tapply(zz<=0, ss, sum),
                      ss[zz<=0], drop=TRUE)
-  ans[[paste(zzname,"0",sep="=")]] <- apply(mm[zz<=0,]*postwt0, 2,sum)
+  ans[[paste(zzname,"0",sep="=")]] <- apply(mm[zz<=0,,drop=FALSE]*postwt0, 2,sum)
   ans[[paste(zzname,"1",sep="=")]] <- ans[[paste(zzname,"0",sep="=")]] + post.diff
 }
 
