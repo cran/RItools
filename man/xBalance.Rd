@@ -25,7 +25,7 @@ xBalance(fmla, strata=NULL, data, report=c("std.diffs","z.scores"),
   to be evaluated.}
   \item{report}{Character vector listing measures to report for each
     stratification; a subset of \code{c("adj.means","adj.mean.diffs",
-      "chisquare.test","std.diffs","z.scores","p.values")}. P-values reported are 2-sided for the null-hypotheis of no effect.}
+      "chisquare.test","std.diffs","z.scores","p.values")}. P-values reported are 2-sided for the null-hypothesis of no effect.}
   \item{na.rm}{Whether to remove rows with NAs on any variables mentioned on
     the RHS of \code{fmla} (i.e. listwise deletion).  Defaults to \code{FALSE}, wherein rows
     aren't deleted but for each variable with \code{NA}s a missing-data
@@ -136,22 +136,21 @@ data(nuclearplants)
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data=nuclearplants)
 
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data=nuclearplants,
-         report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
+         report=c("adj.means","adj.mean.diffs","std.diffs", "z.scores", "chisquare.test"))
 
 xBalance(pr~.-cost-pt, strata=factor(nuclearplants$pt), data=nuclearplants, 
-         report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
-
-xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
-         strata=data.frame(unstrat=factor(character(32)),
-           pt=factor(nuclearplants$pt)),
-         data=nuclearplants,
-         report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
+         report=c("adj.means","adj.mean.diffs","std.diffs", "z.scores", "chisquare.test"))
 
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
          strata=list(unstrat=NULL, pt=~pt),
          data=nuclearplants,
-         report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
+         report=c("adj.means", "chisquare.test"))
 
+xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
+         strata=data.frame(unstrat=factor('none'),
+           pt=factor(nuclearplants$pt)),
+         data=nuclearplants,
+         report=c("adj.means", "chisquare.test"))
 
 
 }
