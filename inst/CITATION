@@ -1,8 +1,8 @@
 citHeader("To cite RItools in publications use:")
-	      
-desc <- packageDescription("RItools")
-year <- substr(desc$Date,1,4) ##sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-vers <- paste("R package version", desc$Version)
+
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("RItools")	      
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date) 
+vers <- paste("R package version", meta$Version)
      
 
 citEntry(entry="article",
@@ -14,7 +14,7 @@ citEntry(entry="article",
 	Title = "Covariate balance in simple, stratified and clustered  comparative studies",
 	Volume = "23",
 	Year = "2008",
-         textVersion=paste("Ben B. Hansen and Jake Bowers (",year,
+         textVersion=paste("Ben B. Hansen and Jake Bowers (",2008,
            "). Covariate balance in simple, stratified and clustered comparative studies. Statistical Science. 23(2):219--236.",
            sep="")
          )
@@ -27,7 +27,7 @@ citEntry(entry="Manual",
 	Note = vers,
 	##Month = "SomeMonth",
 	Year = year ,
-        url = "http://www.umich.edu/~jwbowers/RItools.html",
+        url = "http://www.jakebowers.org/RItools.html",
         textVersion = paste("Jake Bowers, Mark Fredrickson, and Ben Hansen (",
                     year,
                     "). RItools:Randomization Inference Tools. ",
@@ -38,3 +38,5 @@ citEntry(entry="Manual",
 citFooter("Please cite our article and package when using it for data analysis. If you would like BibTeX formated citations type", sQuote("toBibtex(citation(\"RItools\"))"),
           ". See also", sQuote("citation(\"pkgname\")"),
           "for citing R packages.")
+
+
