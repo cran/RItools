@@ -78,7 +78,7 @@ swt.ls <- xBalance.make.stratwts(stratum.weights,ss.df, gs.df, zz, data, normali
                 function(nm) {
 ###                  workingswt.ls<-swt.ls[[nm]]  # shouldn't be neccessary after r216 change to xBalance.make.stratwts
 ###                  workingswt.ls[["wtratio"]]<-swt.ls[[nm]][["wtratio"]][gs.df[[nm]]]
-                  xBalanceEngine(ss.df[gs.df[[nm]],nm,drop=TRUE],
+                  xBalanceEngine(factor(ss.df[gs.df[[nm]],nm]),
                                             zz[gs.df[[nm]]],
                                             mm1[gs.df[[nm]],,drop=FALSE],
                                             report, swt.ls[[nm]], 

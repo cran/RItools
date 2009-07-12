@@ -1,9 +1,3 @@
-* Bug: xBalance dies if you ask it only to report chisquare.test and nothing else:
-xBalance(pr~.-cost-pt, data=nuclearplants, report='chisquare.test')
-Error in `[<-.data.frame`(`*tmp*`, "p", value = c(0.760201833266769, 0.777213430308256,  : 
-  replacement has 8 rows, data has 0
-
-Started working on this (in the trunk!) at rev 296, changing xBalanceEngine L67.
 * Add examples to sumStatOMinusE.Rd. 
 
 * Add capability to use simulation to assess coverage of confidence intervals for small and intermediate sample sizes.

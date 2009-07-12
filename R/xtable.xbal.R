@@ -20,7 +20,6 @@ xtable.xbal <- function(x,caption = NULL, label = NULL, align =c("l",rep("r",nco
     ##Setup the variable by varible table as a dataframe rather than ftable
     xvardf<-data.frame(xprint$vartable[,])
     row.names(xvardf)<-attr(xprint$vartable,"row.vars")[["vars"]]
-    names(xvardf) < 
     
     if(!is.null(col.labels)) {
       names(xvardf) <- col.labels
@@ -34,7 +33,7 @@ xtable.xbal <- function(x,caption = NULL, label = NULL, align =c("l",rep("r",nco
       #   rep(attr(xprint$vartable,"col.vars")[["stat"]], numstrata),
       #   "}",sep="")
 
-      names(xvardf) <- attr(xprint$vartable,"col.vars")[["stat"]]
+      names(xvardf) <- rep(attr(xprint$vartable,"col.vars")[["stat"]], numstrata)
     }
 
     ##call xtable on the resulting data.frame
