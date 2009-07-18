@@ -1,5 +1,24 @@
+2009-07-02
+	* Changes to harmonic.R and to xBalance.make.stratwts.R 
+	purpose of these was to fix a bug I caught involving poor handling of strata w/o variation in zz.  The essential change is at L30 of xBalance.make.stratwts.R (appears to have to do with changes in R's handling of "drop=" argument in subsetting of data frames -- no longer works as it did).  Changes to Harmonic.R and other changes to xBalance.make.stratwts.R could be reverted if we like; I did verify that they don't interfere w/ passing of basic tests.
+2009-06-29
+	* Updated xtable.xbal documentation to reflect change of default column alignment back to 'l'.
+	* In xBalanceEngine, changed handling of variables with no variation
+	Specifically, variables for which the null adjusted s.d. has variance 0 now get a p value of 1 rather than 0. Other calculations (z scores, chisquare, etc) not affected.
+	* In plot.xbal, added more informative error messaged when fed an object w/o 'std.diffs' results 
+2009-06-25
+	* Version 0.1-7
+	* Fixed bug in latex export via xtable.
 2009-05-07
 	* Version 0.1-6 Updated CITATION and DESCRIPTION per Hornik 
+	* addressed problem when report="chisquare.test"
+Did this somewhere prior to this version, not precisely here (svn rev296). Example:
+xBalance(pr~.-cost-pt, data=nuclearplants, report='chisquare.test')
+Error in `[<-.data.frame`(`*tmp*`, "p", value = c(0.760201833266769, 0.777213430308256,  : 
+  replacement has 8 rows, data has 0
+
+Started working on this (in the trunk!) at rev 296, changing xBalanceEngine L67.
+
 2008-09-27
 	* Version 0.1-2 Small bug fix for tests of a single covariate.
 2008-08-16

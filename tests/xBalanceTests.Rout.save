@@ -1,13 +1,11 @@
 
-R version 2.7.2 (2008-08-25)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.0 (2009-04-17)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -19,7 +17,9 @@ Type 'q()' to quit R.
 
 > require("RItools")
 Loading required package: RItools
-Package SparseM (0.78) loaded.  To cite, see citation("SparseM")
+Package SparseM (0.80) loaded.  
+	   To cite, see citation("SparseM")
+
 > 
 > data(nuclearplants)
 > 
@@ -56,7 +56,7 @@ cum.n        8.7273   8.1000   -0.6273  -0.0976  -0.2598
         chisquare df p.value
 unstrat      11.5  8   0.177
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
+Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
 > 
 > xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 +          strata=data.frame(unstrat=factor(character(32)),
@@ -79,7 +79,7 @@ cum.n        8.7273   8.1000   -0.6273  -0.0976  -0.2598           8.7209   7.90
 unstrat      11.5  8   0.177
 pt           10.8  8   0.215
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
+Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
 > 
 > xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 +          strata=list(unstrat=NULL, pt=~pt),
@@ -101,7 +101,7 @@ cum.n        8.7273   8.1000   -0.6273  -0.0976  -0.2598           8.7209   7.90
 unstrat      11.5  8   0.177
 pt           10.8  8   0.215
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
+Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
 > 
 > ###(b0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 > ###                ~factor(pt), nuclearplants))
@@ -367,10 +367,11 @@ cum.nF21         -0.2548 -0.6742          -0.2282 -0.6070
 > testdata$cum.nF[testdata$cum.n>16]<-NA
 > testdata$cum.nF[testdata$cum.n==7]<-NA
 > table(testdata$pt,testdata$cum.nF,exclude=c()) ##Notice that the levels don't disappear by default.
-   
-    1 2 3 5 6 7 8 11 12 14 15 16 17 18 19 20 21
-  0 4 3 4 2 1 0 1  0  2  1  1  1  0  0  0  0  0
-  1 0 0 0 0 0 0 2  3  0  0  0  0  0  0  0  0  0
+      
+       1 2 3 5 6 7 8 11 12 14 15 16 17 18 19 20 21 <NA>
+  0    4 3 4 2 1 0 1  0  2  1  1  1  0  0  0  0  0    6
+  1    0 0 0 0 0 0 2  3  0  0  0  0  0  0  0  0  0    1
+  <NA> 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0  0  0    0
 > xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=FALSE)
           strata nostrata                    thept                
           stat   std.diff    z            std.diff    z           
@@ -387,18 +388,18 @@ cum.nF2           0.0302  0.0805           0.0966  0.2610
 cum.nF3           -0.1066 -0.2838          -0.0341 -0.0924        
 cum.nF5           0.2194  0.5815           0.2806  0.7509         
 cum.nF6           -0.2548 -0.6742          -0.2282 -0.6070        
-cum.nF7           NaN     0.0000  ***      NaN     0.0000  ***    
+cum.nF7           NaN     0.0000           NaN     0.0000         
 cum.nF8           0.5296  1.3683           0.3786  0.9460         
 cum.nF11          0.5296  1.3683           0.2590  0.7454         
 cum.nF12          0.2194  0.5815           0.2806  0.7509         
 cum.nF14          -0.2548 -0.6742          -0.2282 -0.6070        
 cum.nF15          -0.2548 -0.6742          -0.2282 -0.6070        
 cum.nF16          -0.2548 -0.6742          -0.2282 -0.6070        
-cum.nF17          NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF18          NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF19          NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF20          NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF21          NaN     0.0000  ***      NaN     0.0000  ***    
+cum.nF17          NaN     0.0000           NaN     0.0000         
+cum.nF18          NaN     0.0000           NaN     0.0000         
+cum.nF19          NaN     0.0000           NaN     0.0000         
+cum.nF20          NaN     0.0000           NaN     0.0000         
+cum.nF21          NaN     0.0000           NaN     0.0000         
 cum.nF.NA         -0.4124 -1.0783          -0.4025 -1.0206        
 > 
 > ##This isn't right either.
@@ -418,18 +419,18 @@ cum.nF2          -0.0410 -0.1005          0.0546  0.1332
 cum.nF3          -0.1992 -0.4900          -0.0966 -0.2378        
 cum.nF5          0.1751  0.4214           0.2668  0.6341         
 cum.nF6          -0.2988 -0.7500          -0.2656 -0.6547        
-cum.nF7          NaN     0.0000  ***      NaN     0.0000  ***    
+cum.nF7          NaN     0.0000           NaN     0.0000         
 cum.nF8          0.4999  1.1558           0.2898  0.6623         
 cum.nF11         0.4999  1.1558           0.1159  0.3333         
 cum.nF12         0.1751  0.4214           0.2668  0.6341         
 cum.nF14         -0.2988 -0.7500          -0.2656 -0.6547        
 cum.nF15         -0.2988 -0.7500          -0.2656 -0.6547        
 cum.nF16         -0.2988 -0.7500          -0.2656 -0.6547        
-cum.nF17         NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF18         NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF19         NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF20         NaN     0.0000  ***      NaN     0.0000  ***    
-cum.nF21         NaN     0.0000  ***      NaN     0.0000  ***    
+cum.nF17         NaN     0.0000           NaN     0.0000         
+cum.nF18         NaN     0.0000           NaN     0.0000         
+cum.nF19         NaN     0.0000           NaN     0.0000         
+cum.nF20         NaN     0.0000           NaN     0.0000         
+cum.nF21         NaN     0.0000           NaN     0.0000         
 > 
 > 
 > #####################################################

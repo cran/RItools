@@ -27,7 +27,7 @@ wtlist <- list()
       sweights <-
         do.call(swt.ls[[nn]],
                 args=list(data=data.frame(Tx.grp=zz[goodstrat.df[[nn]]],
-                            stratum.code=ss.df[goodstrat.df[[nn]],nn,drop=TRUE],
+                            stratum.code=factor(ss.df[goodstrat.df[[nn]],nn]),
                             data[goodstrat.df[[nn]],,drop=FALSE])),
                 envir=parent.frame())
 } else
@@ -44,6 +44,12 @@ if (!(all(levels(factor(ss.df[[nn]])) %in% names(swt.ls[[nn]])) ))
 sweights <- swt.ls[[nn]][levels(factor(ss.df[[nn]]))]
 }
 
+if (all(is.na(sweights))) stop(paste("All stratum weights NA (strat.",nn,")."))
+if (any(is.na(sweights)))
+  {
+  sweights[is.na(sweights)] <- 0
+  warning(paste("NAs in stratum weights (",nn," strat.); to be interpreted as 0s.", sep=""))
+  }
 if (any(sweights<0)) stop("stratum weights must be nonnegative")
 
 if (normalize.weights) sweights <- sweights/sum(sweights, na.rm=TRUE)
@@ -51,7 +57,7 @@ if (normalize.weights) sweights <- sweights/sum(sweights, na.rm=TRUE)
 if (identical(harmonic, swt.ls[[nn]])) { hwts <- sweights } else
 {
   hwts <- harmonic(data.frame(Tx.grp=zz[goodstrat.df[[nn]]],
-                              stratum.code=ss.df[goodstrat.df[[nn]],nn,drop=TRUE],
+                              stratum.code=factor(ss.df[goodstrat.df[[nn]],nn]),
                               data[goodstrat.df[[nn]],,drop=FALSE]))
 }
 hwts <- hwts/sum(hwts, na.rm=TRUE)

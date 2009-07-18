@@ -65,7 +65,7 @@ ssvar <- apply(dv*tmat*tmat, 2, sum)
   if ('z.scores' %in% report) ans['z'] <- ifelse(ssvar<=.Machine$double.eps,0,
                                                  ssn/sqrt(ssvar))
   if (any(c("adj.means","adj.mean.diffs","std.diffs","z.scores","p.values") %in% report))  ##always produce a pvalue to use to create signif stars.
-    ans['p'] <- ifelse(ssvar<=.Machine$double.eps,0,
+    ans['p'] <- ifelse(ssvar<=.Machine$double.eps,1,
                        2*pnorm(abs(ssn/sqrt(ssvar)),lower=FALSE))
 
 if ("chisquare.test"%in%report)
