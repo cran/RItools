@@ -81,10 +81,11 @@ pt           10.8  8   0.215
 ---
 Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
 > 
-> xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
+> (xb0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 +          strata=list(unstrat=NULL, pt=~pt),
 +          data=nuclearplants,
 +          report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
++ )
       strata  unstrat                                                    pt                                             
       stat       pr=0     pr=1 adj.diff std.diff     z                 pr=0     pr=1 adj.diff std.diff     z            
 vars                                                                                                                    
@@ -102,7 +103,6 @@ unstrat      11.5  8   0.177
 pt           10.8  8   0.215
 ---
 Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
-> 
 > ###(b0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 > ###                ~factor(pt), nuclearplants))
 > #####################################################
@@ -270,15 +270,39 @@ Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1
 > #####################################################
 > ######               xtable method                ###
 > #####################################################
-> ###if (require('xtable'))
-> ###  {
-> ###xtable(xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
-> ###                ~factor(pt), nuclearplants)
-> ###       )
-> ###xtable(b0)    
-> ###  }
-> ###
-> ###
+> if (require('xtable'))
++   {
++ xtable(xb0)
++ xtable(xb0, caption="Caption!", label="thetable", digits=1,
++        align=rep('l', prod(dim(xb0$result)[2:3])+1),
++        display=c('s', rep(c(rep('fg',5), 's'),2)) #,col.labels= do this one later
++        )
++   }
+Loading required package: xtable
+% latex table generated in R 2.9.0 by xtable 1.5-5 package
+% Sat Oct 10 19:48:39 2009
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{lllllllllllll}
+  \hline
+ & pr=0 & pr=1 & adj.diff & std.diff & z &  & pr=0 & pr=1 & adj.diff & std.diff & z &  \\ 
+  \hline
+date & 69 & 68 & -0.1 & -0.1 & -0.3 &     & 68 & 69 & 0.1 & 0.1 & 0.3 &     \\ 
+  t1 & 14 & 14 & 0.4 & 0.1 & 0.3 &     & 13 & 14 &  1 & 0.3 & 0.8 &     \\ 
+  t2 & 59 & 69 & 1e+01 &  1 &  2 & *   & 59 & 69 &  9 &  1 &  2 & *   \\ 
+  cap & 805 & 870 & 65 & 0.3 & 0.9 &     & 806 & 873 & 67 & 0.4 & 0.9 &     \\ 
+  ne & 0.3 & 0.2 & -0.07 & -0.2 & -0.4 &     & 0.2 & 0.2 & -0.02 & -0.05 & -0.1 &     \\ 
+  ct & 0.5 & 0.3 & -0.2 & -0.3 & -0.8 &     & 0.4 & 0.3 & -0.1 & -0.2 & -0.6 &     \\ 
+  bw & 0.2 & 0.2 & 0.02 & 0.05 & 0.1 &     & 0.2 & 0.2 & -0.05 & -0.1 & -0.3 &     \\ 
+  cum.n &  9 &  8 & -0.6 & -0.1 & -0.3 &     &  9 &  8 & -0.8 & -0.1 & -0.3 &     \\ 
+   \hline
+\end{tabular}
+\caption{Caption!}
+\label{thetable}
+\end{center}
+\end{table}
+> 
+> 
 > #####################################################
 > ######               include.means                ###
 > #####################################################

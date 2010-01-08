@@ -16,11 +16,11 @@ xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
          data=nuclearplants,
          report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
 
-xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
+(xb0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
          strata=list(unstrat=NULL, pt=~pt),
          data=nuclearplants,
          report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
-
+)
 ###(b0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###                ~factor(pt), nuclearplants))
 #####################################################
@@ -188,15 +188,16 @@ xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 #####################################################
 ######               xtable method                ###
 #####################################################
-###if (require('xtable'))
-###  {
-###xtable(xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
-###                ~factor(pt), nuclearplants)
-###       )
-###xtable(b0)    
-###  }
-###
-###
+if (require('xtable'))
+  {
+xtable(xb0)
+xtable(xb0, caption="Caption!", label="thetable", digits=1,
+       align=rep('l', prod(dim(xb0$result)[2:3])+1),
+       display=c('s', rep(c(rep('fg',5), 's'),2)) #,col.labels= do this one later
+       )
+  }
+
+
 #####################################################
 ######               include.means                ###
 #####################################################

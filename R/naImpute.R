@@ -1,8 +1,8 @@
 naImpute <- function(FMLA,DATA)
 {
-  fmla <- terms.formula(if (length(FMLA)>2) FMLA[-2] else FMLA,
+  fmla.rhs <- terms.formula(if (length(FMLA)>2) FMLA[-2] else FMLA,
                         dat=DATA, keep.order=TRUE)
-  dat <- model.frame.default(fmla,DATA, na.action=na.pass)
+  dat <- get_all_vars(fmla.rhs,DATA)
   badfactor <- sapply(dat,function(x) nlevels(x)==1)
   dat[badfactor] <- lapply(dat[badfactor], as.integer) ##Is this right? shouldn't it be dat[,badfactor] ?
   factor.dat <- sapply(dat,is.factor)
@@ -45,6 +45,6 @@ naImpute <- function(FMLA,DATA)
                       dat, dat.NA)
     TFMLA <- if (length(dat.NA)) update.formula(FMLA, as.formula(paste(".~.+",paste(names(dat.NA), collapse=" + ")))) else FMLA
     TFMLA <- terms.formula(TFMLA,dat=dat, keep.order=TRUE) 
-    return(structure(dat, TFMLA=TFMLA))
-  } else return(structure(DATA,TFMLA=terms.formula(FMLA,dat=DATA, keep.order=TRUE)))
+    return(structure(dat, terms=TFMLA))
+  } else return(structure(DATA,terms=terms.formula(FMLA,dat=DATA, keep.order=TRUE)))
 }
