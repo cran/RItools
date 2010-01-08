@@ -138,11 +138,7 @@ print.xbal <- function (x, which.strata=dimnames(x$results)[["strata"]],
     ##cat(paste("n = ", n, ", k = ", k,
     ##          "\nresidual sd = ", fround(summ$sigma, digits), ", R-Squared = ", fround(summ$r.squared, 2),
     ##          "\n", sep = ""))
-  }
-  theprintresults <- list(vartable=thevartab,overalltable=theoveralltab)
-  latex.annotation <- paste(paste(" & \\multicolumn{",length(which.stats),"}{c}{",which.strata[1],"}"),
-                            paste("\\multicolumn{",length(which.stats),"}{c}{",which.strata[2],"} \\\\"),
-                            sep=" & ")
-  invisible(structure(theprintresults,latex.annotation=latex.annotation))
-  })
+  }else{
+  list(vartable=thevartab,overalltable=theoveralltab)}
+  } )
 }

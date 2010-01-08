@@ -23,9 +23,13 @@
 }
 \details{
   To get decimal aligned
-  columns, specify \code{align c("l", rep(".", ncol(xvardf)))} in your
-  call to \code{xtable}.  Then use the dcolumn package within LaTeX
-and also a new column definition using \code{\\newcolumntype\{.\}\{D\{.\}\{.\}\{2.2\}}.  
+  columns, specify \code{align=c("l", rep(".", <ncols>))}, where
+  \code{<ncols>} is the number of columns to be printed, in your
+  call to \code{xtable}.  Then use the dcolumn package and define
+  \samp{'.'} within LaTeX: 
+add the lines \code{\\usepackage\{dcolumn\}} and
+\code{\\newcolumntype\{.\}\{D\{.\}\{.\}\{2.2\}\}} to your LaTeX
+document's preamble.  
 }
 \value{
  This function produces an xtable object which can then be printed with

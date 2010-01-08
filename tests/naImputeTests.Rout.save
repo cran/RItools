@@ -1,13 +1,11 @@
 
-R version 2.7.2 (2008-08-25)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.0 (2009-04-17)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -17,11 +15,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
 > require("RItools")
 Loading required package: RItools
-Package SparseM (0.78) loaded.  To cite, see citation("SparseM")
+Package SparseM (0.80) loaded.  
+	   To cite, see citation("SparseM")
+
 > data(nuclearplants)
 > 
 > nuclearplants$cum.n.fac <- factor(ifelse(c(T,T,T,F),nuclearplants$cum.n,NA))
@@ -68,140 +66,107 @@ b 217.38 67.25 13 72  745  1  0  0  0     8  1         1   TRUE     1    67.25
 c 270.71 67.83  7 80  886  1  0  0  1    11  1      <NA>   TRUE     1    67.83
 > 
 > RItools:::naImpute(cost~cap+date.mod+cum.n+as.logical(pt),nuclearplants)
-    cost  date t1 t2 pr ne ct bw pt cum.n.fac pt.log pt.na  cap date.mod cum.n
-H 460.05 68.58 14 46  0  1  0  0  0        14  FALSE     0  687   68.623    14
-I 452.99 67.33 10 73  0  0  1  0  0         1  FALSE     0 1065   68.623     1
-A 443.22 67.33 10 85  1  0  1  0  0         1     NA    NA 1065   67.330     1
-J 652.32 68.00 11 67  0  1  1  0  0      <NA>     NA    NA 1065   68.000    12
-B 642.23 68.00 11 78  1  1  1  0  0        14  FALSE     0 1065   68.000    12
-K 345.39 67.92 13 51  0  1  1  0  0         1  FALSE     0  514   67.920     3
-L 272.37 68.17 12 50  0  0  0  0  0         1  FALSE     0  822   68.170     5
-M 317.21 68.42 14 59  0  0  0  0  0      <NA>  FALSE     0  457   68.420     1
-C 457.12 68.42 15 55  1  0  0  0  0        14  FALSE     0  822   68.420     5
-N 690.19 68.33 12 71  0  1  1  1  0         1  FALSE     0  792   68.330     2
-O 350.63 68.58 12 64  0  0  0  0  0         1  FALSE     0  560   68.580     3
-P 402.59 68.75 13 47  0  1  0  0  0      <NA>  FALSE     0  790   68.750     6
-Q 412.18 68.42 15 62  0  0  1  0  0        14  FALSE     0  530   68.420     2
-R 495.58 68.92 17 52  0  0  0  0  0         1  FALSE     0 1050   68.920     7
-S 394.36 68.92 13 65  0  0  0  1  0         1  FALSE     0  850   68.920    16
-T 423.32 68.42 11 67  0  0  0  0  0      <NA>  FALSE     0  778   68.420     3
-U 712.27 69.50 18 60  0  1  0  0  0        14  FALSE     0  845   69.500    17
-D 289.66 68.42 15 76  1  0  1  0  0         1  FALSE     0  530   68.420     2
-V 881.24 69.17 15 67  0  0  0  0  0         1  FALSE     0 1090   69.170     1
-E 490.88 68.92 16 59  1  0  0  0  0      <NA>  FALSE     0 1050   68.920     8
-W 567.79 68.75 11 70  0  0  1  1  0        14  FALSE     0  913   68.750    15
-F 665.99 70.92 22 57  1  1  0  0  0         1  FALSE     0  828   70.920    20
-X 621.45 69.67 16 59  0  0  1  0  0         1  FALSE     0  786   69.670    18
-G 608.80 70.08 19 58  1  0  0  0  0      <NA>  FALSE     0  821   70.080     3
-Y 473.64 70.42 19 44  0  0  1  0  0        14  FALSE     0  538   70.420    19
-Z 697.14 71.08 20 57  0  0  1  0  0         1  FALSE     0 1130   71.080    21
-d 207.51 67.25 13 63  0  0  0  0  1         1   TRUE     1  745   67.250     8
-e 288.48 67.17  9 48  0  0  1  0  1      <NA>   TRUE     1  821   67.170     7
-f 284.88 67.83 12 63  0  0  0  1  1        14   TRUE     1  886   67.830    11
-a 280.36 67.83 12 71  1  0  0  1  1         1   TRUE     1  886   67.830    11
-b 217.38 67.25 13 72  1  0  0  0  1         1   TRUE     1  745   67.250     8
-c 270.71 67.83  7 80  1  0  0  1  1      <NA>   TRUE     1  886   67.830    11
-  as.logical.pt. date.mod.NA
-H          FALSE        TRUE
-I          FALSE        TRUE
-A          FALSE       FALSE
-J          FALSE       FALSE
-B          FALSE       FALSE
-K          FALSE       FALSE
-L          FALSE       FALSE
-M          FALSE       FALSE
-C          FALSE       FALSE
-N          FALSE       FALSE
-O          FALSE       FALSE
-P          FALSE       FALSE
-Q          FALSE       FALSE
-R          FALSE       FALSE
-S          FALSE       FALSE
-T          FALSE       FALSE
-U          FALSE       FALSE
-D          FALSE       FALSE
-V          FALSE       FALSE
-E          FALSE       FALSE
-W          FALSE       FALSE
-F          FALSE       FALSE
-X          FALSE       FALSE
-G          FALSE       FALSE
-Y          FALSE       FALSE
-Z          FALSE       FALSE
-d           TRUE       FALSE
-e           TRUE       FALSE
-f           TRUE       FALSE
-a           TRUE       FALSE
-b           TRUE       FALSE
-c           TRUE       FALSE
+    cost  date t1 t2 pr ne ct bw cum.n.fac pt.log pt.na  cap date.mod cum.n pt
+H 460.05 68.58 14 46  0  1  0  0        14  FALSE     0  687   68.623    14  0
+I 452.99 67.33 10 73  0  0  1  0         1  FALSE     0 1065   68.623     1  0
+A 443.22 67.33 10 85  1  0  1  0         1     NA    NA 1065   67.330     1  0
+J 652.32 68.00 11 67  0  1  1  0      <NA>     NA    NA 1065   68.000    12  0
+B 642.23 68.00 11 78  1  1  1  0        14  FALSE     0 1065   68.000    12  0
+K 345.39 67.92 13 51  0  1  1  0         1  FALSE     0  514   67.920     3  0
+L 272.37 68.17 12 50  0  0  0  0         1  FALSE     0  822   68.170     5  0
+M 317.21 68.42 14 59  0  0  0  0      <NA>  FALSE     0  457   68.420     1  0
+C 457.12 68.42 15 55  1  0  0  0        14  FALSE     0  822   68.420     5  0
+N 690.19 68.33 12 71  0  1  1  1         1  FALSE     0  792   68.330     2  0
+O 350.63 68.58 12 64  0  0  0  0         1  FALSE     0  560   68.580     3  0
+P 402.59 68.75 13 47  0  1  0  0      <NA>  FALSE     0  790   68.750     6  0
+Q 412.18 68.42 15 62  0  0  1  0        14  FALSE     0  530   68.420     2  0
+R 495.58 68.92 17 52  0  0  0  0         1  FALSE     0 1050   68.920     7  0
+S 394.36 68.92 13 65  0  0  0  1         1  FALSE     0  850   68.920    16  0
+T 423.32 68.42 11 67  0  0  0  0      <NA>  FALSE     0  778   68.420     3  0
+U 712.27 69.50 18 60  0  1  0  0        14  FALSE     0  845   69.500    17  0
+D 289.66 68.42 15 76  1  0  1  0         1  FALSE     0  530   68.420     2  0
+V 881.24 69.17 15 67  0  0  0  0         1  FALSE     0 1090   69.170     1  0
+E 490.88 68.92 16 59  1  0  0  0      <NA>  FALSE     0 1050   68.920     8  0
+W 567.79 68.75 11 70  0  0  1  1        14  FALSE     0  913   68.750    15  0
+F 665.99 70.92 22 57  1  1  0  0         1  FALSE     0  828   70.920    20  0
+X 621.45 69.67 16 59  0  0  1  0         1  FALSE     0  786   69.670    18  0
+G 608.80 70.08 19 58  1  0  0  0      <NA>  FALSE     0  821   70.080     3  0
+Y 473.64 70.42 19 44  0  0  1  0        14  FALSE     0  538   70.420    19  0
+Z 697.14 71.08 20 57  0  0  1  0         1  FALSE     0 1130   71.080    21  0
+d 207.51 67.25 13 63  0  0  0  0         1   TRUE     1  745   67.250     8  1
+e 288.48 67.17  9 48  0  0  1  0      <NA>   TRUE     1  821   67.170     7  1
+f 284.88 67.83 12 63  0  0  0  1        14   TRUE     1  886   67.830    11  1
+a 280.36 67.83 12 71  1  0  0  1         1   TRUE     1  886   67.830    11  1
+b 217.38 67.25 13 72  1  0  0  0         1   TRUE     1  745   67.250     8  1
+c 270.71 67.83  7 80  1  0  0  1      <NA>   TRUE     1  886   67.830    11  1
+  date.mod.NA
+H        TRUE
+I        TRUE
+A       FALSE
+J       FALSE
+B       FALSE
+K       FALSE
+L       FALSE
+M       FALSE
+C       FALSE
+N       FALSE
+O       FALSE
+P       FALSE
+Q       FALSE
+R       FALSE
+S       FALSE
+T       FALSE
+U       FALSE
+D       FALSE
+V       FALSE
+E       FALSE
+W       FALSE
+F       FALSE
+X       FALSE
+G       FALSE
+Y       FALSE
+Z       FALSE
+d       FALSE
+e       FALSE
+f       FALSE
+a       FALSE
+b       FALSE
+c       FALSE
 > 
 > RItools:::naImpute(cost~cap+date+cum.n.fac+as.logical(pt),nuclearplants)
-    cost t1 t2 pr ne ct bw cum.n pt pt.log pt.na date.mod  cap  date cum.n.fac
-H 460.05 14 46  0  1  0  0    14  0  FALSE     0       NA  687 68.58        14
-I 452.99 10 73  0  0  1  0     1  0  FALSE     0       NA 1065 67.33         1
-A 443.22 10 85  1  0  1  0     1  0     NA    NA    67.33 1065 67.33         1
-J 652.32 11 67  0  1  1  0    12  0     NA    NA    68.00 1065 68.00       .NA
-B 642.23 11 78  1  1  1  0    12  0  FALSE     0    68.00 1065 68.00        14
-K 345.39 13 51  0  1  1  0     3  0  FALSE     0    67.92  514 67.92         1
-L 272.37 12 50  0  0  0  0     5  0  FALSE     0    68.17  822 68.17         1
-M 317.21 14 59  0  0  0  0     1  0  FALSE     0    68.42  457 68.42       .NA
-C 457.12 15 55  1  0  0  0     5  0  FALSE     0    68.42  822 68.42        14
-N 690.19 12 71  0  1  1  1     2  0  FALSE     0    68.33  792 68.33         1
-O 350.63 12 64  0  0  0  0     3  0  FALSE     0    68.58  560 68.58         1
-P 402.59 13 47  0  1  0  0     6  0  FALSE     0    68.75  790 68.75       .NA
-Q 412.18 15 62  0  0  1  0     2  0  FALSE     0    68.42  530 68.42        14
-R 495.58 17 52  0  0  0  0     7  0  FALSE     0    68.92 1050 68.92         1
-S 394.36 13 65  0  0  0  1    16  0  FALSE     0    68.92  850 68.92         1
-T 423.32 11 67  0  0  0  0     3  0  FALSE     0    68.42  778 68.42       .NA
-U 712.27 18 60  0  1  0  0    17  0  FALSE     0    69.50  845 69.50        14
-D 289.66 15 76  1  0  1  0     2  0  FALSE     0    68.42  530 68.42         1
-V 881.24 15 67  0  0  0  0     1  0  FALSE     0    69.17 1090 69.17         1
-E 490.88 16 59  1  0  0  0     8  0  FALSE     0    68.92 1050 68.92       .NA
-W 567.79 11 70  0  0  1  1    15  0  FALSE     0    68.75  913 68.75        14
-F 665.99 22 57  1  1  0  0    20  0  FALSE     0    70.92  828 70.92         1
-X 621.45 16 59  0  0  1  0    18  0  FALSE     0    69.67  786 69.67         1
-G 608.80 19 58  1  0  0  0     3  0  FALSE     0    70.08  821 70.08       .NA
-Y 473.64 19 44  0  0  1  0    19  0  FALSE     0    70.42  538 70.42        14
-Z 697.14 20 57  0  0  1  0    21  0  FALSE     0    71.08 1130 71.08         1
-d 207.51 13 63  0  0  0  0     8  1   TRUE     1    67.25  745 67.25         1
-e 288.48  9 48  0  0  1  0     7  1   TRUE     1    67.17  821 67.17       .NA
-f 284.88 12 63  0  0  0  1    11  1   TRUE     1    67.83  886 67.83        14
-a 280.36 12 71  1  0  0  1    11  1   TRUE     1    67.83  886 67.83         1
-b 217.38 13 72  1  0  0  0     8  1   TRUE     1    67.25  745 67.25         1
-c 270.71  7 80  1  0  0  1    11  1   TRUE     1    67.83  886 67.83       .NA
-  as.logical.pt.
-H          FALSE
-I          FALSE
-A          FALSE
-J          FALSE
-B          FALSE
-K          FALSE
-L          FALSE
-M          FALSE
-C          FALSE
-N          FALSE
-O          FALSE
-P          FALSE
-Q          FALSE
-R          FALSE
-S          FALSE
-T          FALSE
-U          FALSE
-D          FALSE
-V          FALSE
-E          FALSE
-W          FALSE
-F          FALSE
-X          FALSE
-G          FALSE
-Y          FALSE
-Z          FALSE
-d           TRUE
-e           TRUE
-f           TRUE
-a           TRUE
-b           TRUE
-c           TRUE
+    cost t1 t2 pr ne ct bw cum.n pt.log pt.na date.mod  cap  date cum.n.fac pt
+H 460.05 14 46  0  1  0  0    14  FALSE     0       NA  687 68.58        14  0
+I 452.99 10 73  0  0  1  0     1  FALSE     0       NA 1065 67.33         1  0
+A 443.22 10 85  1  0  1  0     1     NA    NA    67.33 1065 67.33         1  0
+J 652.32 11 67  0  1  1  0    12     NA    NA    68.00 1065 68.00       .NA  0
+B 642.23 11 78  1  1  1  0    12  FALSE     0    68.00 1065 68.00        14  0
+K 345.39 13 51  0  1  1  0     3  FALSE     0    67.92  514 67.92         1  0
+L 272.37 12 50  0  0  0  0     5  FALSE     0    68.17  822 68.17         1  0
+M 317.21 14 59  0  0  0  0     1  FALSE     0    68.42  457 68.42       .NA  0
+C 457.12 15 55  1  0  0  0     5  FALSE     0    68.42  822 68.42        14  0
+N 690.19 12 71  0  1  1  1     2  FALSE     0    68.33  792 68.33         1  0
+O 350.63 12 64  0  0  0  0     3  FALSE     0    68.58  560 68.58         1  0
+P 402.59 13 47  0  1  0  0     6  FALSE     0    68.75  790 68.75       .NA  0
+Q 412.18 15 62  0  0  1  0     2  FALSE     0    68.42  530 68.42        14  0
+R 495.58 17 52  0  0  0  0     7  FALSE     0    68.92 1050 68.92         1  0
+S 394.36 13 65  0  0  0  1    16  FALSE     0    68.92  850 68.92         1  0
+T 423.32 11 67  0  0  0  0     3  FALSE     0    68.42  778 68.42       .NA  0
+U 712.27 18 60  0  1  0  0    17  FALSE     0    69.50  845 69.50        14  0
+D 289.66 15 76  1  0  1  0     2  FALSE     0    68.42  530 68.42         1  0
+V 881.24 15 67  0  0  0  0     1  FALSE     0    69.17 1090 69.17         1  0
+E 490.88 16 59  1  0  0  0     8  FALSE     0    68.92 1050 68.92       .NA  0
+W 567.79 11 70  0  0  1  1    15  FALSE     0    68.75  913 68.75        14  0
+F 665.99 22 57  1  1  0  0    20  FALSE     0    70.92  828 70.92         1  0
+X 621.45 16 59  0  0  1  0    18  FALSE     0    69.67  786 69.67         1  0
+G 608.80 19 58  1  0  0  0     3  FALSE     0    70.08  821 70.08       .NA  0
+Y 473.64 19 44  0  0  1  0    19  FALSE     0    70.42  538 70.42        14  0
+Z 697.14 20 57  0  0  1  0    21  FALSE     0    71.08 1130 71.08         1  0
+d 207.51 13 63  0  0  0  0     8   TRUE     1    67.25  745 67.25         1  1
+e 288.48  9 48  0  0  1  0     7   TRUE     1    67.17  821 67.17       .NA  1
+f 284.88 12 63  0  0  0  1    11   TRUE     1    67.83  886 67.83        14  1
+a 280.36 12 71  1  0  0  1    11   TRUE     1    67.83  886 67.83         1  1
+b 217.38 13 72  1  0  0  0     8   TRUE     1    67.25  745 67.25         1  1
+c 270.71  7 80  1  0  0  1    11   TRUE     1    67.83  886 67.83       .NA  1
 > 
 > RItools:::naImpute(cost~cap+date+cum.n+pt.log,nuclearplants)
     cost t1 t2 pr ne ct bw pt cum.n.fac pt.na date.mod  cap  date cum.n pt.log

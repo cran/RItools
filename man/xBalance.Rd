@@ -102,8 +102,8 @@ and the strata, in the stratified (``post'') case.
     over the stratifying variables given in \code{strata}.  If
     \dQuote{chisquare.test} is in \code{report}, then the
     data frame also has attributes \code{XX.chisquare} and \code{XX.df}.  Its class is
-    \code{c(\dQuote{xbal}, \dQuote{data.frame})}.  There are plot and
-    print methods for class \code{\dQuote{newbal}}; the print method is
+    \code{c("xbal", "data.frame")}.  There are plot and
+    print methods for class \code{"newbal"}; the print method is
     demonstrated in the examples.  }
 
 \note{

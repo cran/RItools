@@ -1,0 +1,6 @@
+CHANGES in RItools v. 0.1-9
+
+BUG FIXES
+* display, align, etc arguments to xtable.xbal() have been enabled.
+* In xBalance, when specifying a stratification using a formula with several variables, as in "~x+y", the stratification you get is now interaction(x,y) rather than just y.  
+

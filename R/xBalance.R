@@ -5,7 +5,8 @@ xBalance <- function(fmla, strata=NULL,
                      stratum.weights=harmonic, na.rm=FALSE,
                      covariate.scaling=NULL, normalize.weights=TRUE)
 {
-  stopifnot(all(report %in% c("adj.means","adj.mean.diffs","chisquare.test",
+  stopifnot(class(fmla)=="formula",
+            all(report %in% c("adj.means","adj.mean.diffs","chisquare.test",
                               "std.diffs","z.scores","p.values")),
             is.null(strata) || is.factor(strata) || is.list(strata),
             !is.data.frame(strata) || !any(is.na(names(strata))),
@@ -13,7 +14,8 @@ xBalance <- function(fmla, strata=NULL,
             !is.data.frame(strata) || all(sapply(strata, is.factor)),
             !is.list(strata) ||
             (is.data.frame(strata) |
-             all(sapply(strata, function(x) (is.null(x) | "formula" %in% class(x)))))
+             all(sapply(strata, function(x) (is.null(x) | "formula" %in% class(x))))),
+            is.null(data) || is.data.frame(data)
             )
 
 ### NA Handling ##  
@@ -23,7 +25,7 @@ xBalance <- function(fmla, strata=NULL,
 } else
   {
     data <- naImpute(fmla,data)
-    tfmla <- attr(data, 'TFMLA')
+    tfmla <- attr(data, 'terms')
   }
 ### End NA handling ###
 
@@ -57,7 +59,7 @@ mm1 <- xBalance.makeMM(tfmla,data)
                if (is.null(fmla)) factor(numeric(length(zz))) else {
                ss <- eval(attr(terms(fmla), "variables"), data, 
                           pfr) 
-               factor(ss[[length(ss)]])
+               if (length(ss)-1) interaction(ss, drop=TRUE) else factor(ss[[1]])
              }
              }
              )
