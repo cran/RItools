@@ -56,8 +56,8 @@
   The plot allows a quick visual comparison of the effect of different
   stratification designs on the comparability of different
   variables. This is not a replacement for the omnibus statistical test
-  reported as part of \code{\link{print.xbal}}. But, it does allow the
-  analyst an easy look at which variables might be the primary culprits
+  reported as part of \code{\link{print.xbal}}. This plot does allow the
+  analyst an easy way to identify variables that might be the primary culprits
   of overall imbalances and/or a way to assess whether certain important
   covariates might be imbalanced even if the omnibus test reports that
   the stratification overall produces balance.
@@ -81,4 +81,4 @@ xb1<-xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 plot(xb1)
 
 }
-\keyword{print}
+\keyword{hplot, print}

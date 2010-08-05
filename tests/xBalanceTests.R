@@ -21,6 +21,16 @@ xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
          data=nuclearplants,
          report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test'))
 )
+##########################################################################################
+### Oddness on LHS of formula
+##########################################################################################Q
+xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
+         strata=list(unstrat=NULL, pt=~pt),
+         data=nuclearplants,
+         report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test')
+         )
+
+
 ###(b0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###                ~factor(pt), nuclearplants))
 #####################################################
@@ -211,14 +221,14 @@ xtable(xb0, caption="Caption!", label="thetable", digits=1,
 #####################################################
 ######  na.rm=FALSE with missing covariates       ###
 #####################################################
-### Should create a new variable (0=not missing,1=missing) and impute missing values with the mean
+### Should create a new variable (0=not missing,1=missing) and impute missing values with the mean (median is new default)
 
 set.seed(123)
 testdata<-nuclearplants
 testdata$date[sample(1:32,10)]<-NA
 
 xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data = testdata, 
-    na.rm = FALSE)
+    na.rm = FALSE,impfn=mean.default) ##first using the mean to match up with previous versions
 
 #####################################################
 ######  handling factor with no obs for a level in a strata  ###
@@ -235,7 +245,7 @@ table(testdata$pt,testdata$cum.n)
 ##  1 0 0 0 0 0 1 2  3  0  0  0  0  0  0  0  0  0
 
 ##First no missing levels, same in both strata --- looks ok
-xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata)
+xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,impfn=mean.default)
 
 ##Second two missing levels, same in both strata
 ##This doesn't look as good --- we'd prefer to drop levels that don't exist.
@@ -243,10 +253,10 @@ xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata
 testdata$cum.nF[testdata$cum.n>16]<-NA
 testdata$cum.nF[testdata$cum.n==7]<-NA
 table(testdata$pt,testdata$cum.nF,exclude=c()) ##Notice that the levels don't disappear by default.
-xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=FALSE)
+xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=FALSE,impfn=mean.default)
 
 ##This isn't right either.
-xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=TRUE)
+xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=TRUE,impfn=mean.default)
 
 
 #####################################################

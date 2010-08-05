@@ -1,4 +1,12 @@
-CHANGES in RItools v. 0.1-9
+CHANGES in RItools v. 0.1-11
+
+NEW FEATURES
+* the null SD of the difference in adjusted means is now reportable as "adj.means.diffs.sd"
+
+* report="all" provides all relevant statistics
+
+DEPRECATED & DEFUNCT
+* The default imputation method for missing data is the median. Before 0.1-9 it was the mean. To use the mean, use impfn=mean.default.
 
 BUG FIXES
 * display, align, etc arguments to xtable.xbal() have been enabled.

@@ -1,11 +1,13 @@
 
-R version 2.9.0 (2009-04-17)
-Copyright (C) 2009 The R Foundation for Statistical Computing
+R version 2.11.1 (2010-05-31)
+Copyright (C) 2010 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -17,7 +19,7 @@ Type 'q()' to quit R.
 
 > require("RItools")
 Loading required package: RItools
-Package SparseM (0.80) loaded.  
+Package SparseM (0.85) loaded.
 	   To cite, see citation("SparseM")
 
 > 
@@ -56,7 +58,7 @@ cum.n        8.7273   8.1000   -0.6273  -0.0976  -0.2598
         chisquare df p.value
 unstrat      11.5  8   0.177
 ---
-Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
+Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
 > 
 > xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 +          strata=data.frame(unstrat=factor(character(32)),
@@ -79,7 +81,7 @@ cum.n        8.7273   8.1000   -0.6273  -0.0976  -0.2598           8.7209   7.90
 unstrat      11.5  8   0.177
 pt           10.8  8   0.215
 ---
-Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
+Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
 > 
 > (xb0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 +          strata=list(unstrat=NULL, pt=~pt),
@@ -102,7 +104,34 @@ cum.n        8.7273   8.1000   -0.6273  -0.0976  -0.2598           8.7209   7.90
 unstrat      11.5  8   0.177
 pt           10.8  8   0.215
 ---
-Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1 
+Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
+> ##########################################################################################
+> ### Oddness on LHS of formula
+> ##########################################################################################Q
+> xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
++          strata=list(unstrat=NULL, pt=~pt),
++          data=nuclearplants,
++          report=c("adj.means","adj.mean.diffs",'std.diffs', 'z.scores', 'chisquare.test')
++          )
+      strata      unstrat                                                            pt                                                 
+      stat   I(pr == 1)=0 I(pr == 1)=1 adj.diff std.diff     z             I(pr == 1)=0 I(pr == 1)=1 adj.diff std.diff     z            
+vars                                                                                                                                    
+date             68.6182      68.5000  -0.1182  -0.1147  -0.3052               68.4924      68.5903  0.0979   0.0950   0.2923           
+t1               13.6364      14.0000  0.3636   0.1063   0.2830                13.3953      14.3488  0.9535   0.2787   0.7918           
+t2               59.3182      69.1000  9.7818   1.0327   2.4674   *            59.1802      68.5523  9.3721   0.9894   2.3094   *       
+cap              805.1818     869.8000 64.6182  0.3401   0.8948                806.4535     873.0233 66.5698  0.3504   0.9188           
+ne               0.2727       0.2000   -0.0727  -0.1631  -0.4334               0.2442       0.2209   -0.0233  -0.0522  -0.1445          
+ct               0.4545       0.3000   -0.1545  -0.3080  -0.8121               0.4419       0.3314   -0.1105  -0.2201  -0.5828          
+bw               0.1818       0.2000   0.0182   0.0451   0.1202                0.1977       0.1512   -0.0465  -0.1154  -0.3088          
+cum.n            8.7273       8.1000   -0.6273  -0.0976  -0.2598               8.7209       7.9012   -0.8198  -0.1275  -0.3397          
+---Overall Test---
+        chisquare df p.value
+unstrat      11.5  8   0.177
+pt           10.8  8   0.215
+---
+Signif. codes:  0 ‘***’ 0.001 ‘** ’ 0.01 ‘*  ’ 0.05 ‘.  ’ 0.1 ‘   ’ 1 
+> 
+> 
 > ###(b0 <- xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 > ###                ~factor(pt), nuclearplants))
 > #####################################################
@@ -279,15 +308,15 @@ Signif. codes:  0 '***' 0.001 '** ' 0.01 '*  ' 0.05 '.  ' 0.1 '   ' 1
 +        )
 +   }
 Loading required package: xtable
-% latex table generated in R 2.9.0 by xtable 1.5-5 package
-% Sat Oct 10 19:48:39 2009
+% latex table generated in R 2.11.1 by xtable 1.5-6 package
+% Thu Aug  5 21:49:38 2010
 \begin{table}[ht]
 \begin{center}
 \begin{tabular}{lllllllllllll}
   \hline
  & pr=0 & pr=1 & adj.diff & std.diff & z &  & pr=0 & pr=1 & adj.diff & std.diff & z &  \\ 
   \hline
-date & 69 & 68 & -0.1 & -0.1 & -0.3 &     & 68 & 69 & 0.1 & 0.1 & 0.3 &     \\ 
+date & 69 & 69 & -0.1 & -0.1 & -0.3 &     & 68 & 69 & 0.1 & 0.1 & 0.3 &     \\ 
   t1 & 14 & 14 & 0.4 & 0.1 & 0.3 &     & 13 & 14 &  1 & 0.3 & 0.8 &     \\ 
   t2 & 59 & 69 & 1e+01 &  1 &  2 & *   & 59 & 69 &  9 &  1 &  2 & *   \\ 
   cap & 805 & 870 & 65 & 0.3 & 0.9 &     & 806 & 873 & 67 & 0.4 & 0.9 &     \\ 
@@ -316,14 +345,14 @@ date & 69 & 68 & -0.1 & -0.1 & -0.3 &     & 68 & 69 & 0.1 & 0.1 & 0.3 &     \\
 > #####################################################
 > ######  na.rm=FALSE with missing covariates       ###
 > #####################################################
-> ### Should create a new variable (0=not missing,1=missing) and impute missing values with the mean
+> ### Should create a new variable (0=not missing,1=missing) and impute missing values with the mean (median is new default)
 > 
 > set.seed(123)
 > testdata<-nuclearplants
 > testdata$date[sample(1:32,10)]<-NA
 > 
 > xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data = testdata, 
-+     na.rm = FALSE)
++     na.rm = FALSE,impfn=mean.default) ##first using the mean to match up with previous versions
             strata  unstrat                
             stat   std.diff    z           
 vars                                       
@@ -356,7 +385,7 @@ date.NATRUE         -1.0660 -2.5308 *
 > ##  1 0 0 0 0 0 1 2  3  0  0  0  0  0  0  0  0  0
 > 
 > ##First no missing levels, same in both strata --- looks ok
-> xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata)
+> xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,impfn=mean.default)
          strata nostrata                    thept                
          stat   std.diff    z            std.diff    z           
 vars                                                             
@@ -396,7 +425,7 @@ cum.nF21         -0.2548 -0.6742          -0.2282 -0.6070
   0    4 3 4 2 1 0 1  0  2  1  1  1  0  0  0  0  0    6
   1    0 0 0 0 0 0 2  3  0  0  0  0  0  0  0  0  0    1
   <NA> 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0  0  0    0
-> xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=FALSE)
+> xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=FALSE,impfn=mean.default)
           strata nostrata                    thept                
           stat   std.diff    z            std.diff    z           
 vars                                                              
@@ -427,7 +456,7 @@ cum.nF21          NaN     0.0000           NaN     0.0000
 cum.nF.NA         -0.4124 -1.0783          -0.4025 -1.0206        
 > 
 > ##This isn't right either.
-> xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=TRUE)
+> xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=TRUE,impfn=mean.default)
          strata nostrata                    thept                
          stat   std.diff    z            std.diff    z           
 vars                                                             
@@ -464,4 +493,4 @@ cum.nF21         NaN     0.0000           NaN     0.0000
 > ###
 > ###
 > ###
-> 
+>

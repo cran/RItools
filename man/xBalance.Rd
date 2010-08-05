@@ -1,11 +1,11 @@
 \name{xBalance}
 \alias{xBalance}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{STANDARDIZED DIFFERENCES FOR STRATIFIED COMPARISONS}
+\title{Standardized Differences for Stratified Comparisons}
 \description{
   Given covariates, a treatment variable, and a stratifying
-  factor, calculates standardized differences (biases) along each
-  covariate, with and without the stratification.  Also, tests for
+  factor, calculates standardized mean differences along each 
+  covariate, with and without the stratification and tests for
   conditional independence of the treatment variable and the covariates
   within strata.
 }
@@ -13,23 +13,25 @@
 xBalance(fmla, strata=NULL, data, report=c("std.diffs","z.scores"),
          stratum.weights=harmonic, na.rm=FALSE,
          covariate.scaling=NULL,
-         normalize.weights=TRUE)
+         normalize.weights=TRUE,impfn=median)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{fmla}{ A formula containing an indicator of treatment
   assignment on the left hand side and covariates at right. }
-  \item{strata}{ \code{NULL}, a factor with length equal to the number of rows
-    in data, or a data frame of such factors. }
-  \item{data}{ A data frame in which \code{fmla}
-  to be evaluated.}
+  \item{strata}{ \code{NULL}, a list of right-hand-side-only formulas containing the factor(s) identifying the strata, a factor with length equal to the number of rows
+    in data, or a data frame of such factors. See below for examples. }
+  \item{data}{ A data frame in which \code{fmla} and \code{strata} are 
+    to be evaluated.}
   \item{report}{Character vector listing measures to report for each
-    stratification; a subset of \code{c("adj.means","adj.mean.diffs",
-      "chisquare.test","std.diffs","z.scores","p.values")}. P-values reported are 2-sided for the null-hypothesis of no effect.}
+    stratification; a subset of \code{c("adj.means","adj.mean.diffs","adj.mean.diffs.null.sd",
+      "chisquare.test","std.diffs","z.scores","p.values","all")}. P-values
+    reported are two-sided for the null-hypothesis of no effect. The option "all"
+    requests all measures.}
   \item{na.rm}{Whether to remove rows with NAs on any variables mentioned on
     the RHS of \code{fmla} (i.e. listwise deletion).  Defaults to \code{FALSE}, wherein rows
     aren't deleted but for each variable with \code{NA}s a missing-data
-    indicator variable is added to the variables on which balance is calculated.}
+    indicator variable is added to the variables on which balance is calculated and medians are imputed for the variable with missing data (in RItools versions 0.1-9 and before the default imputation was the mean, in RItools versions 0.1-11 and henceforth the default is the median). See the example below.}
   \item{stratum.weights}{Weights to be applied when aggregating across
     strata specified by \code{strata}, defaulting to weights
     proportional to the harmonic mean of treatment and control group
@@ -46,11 +48,14 @@ xBalance(fmla, strata=NULL, data, report=c("std.diffs","z.scores"),
     equal to 0).  Also, see details.}
   \item{normalize.weights}{If \code{TRUE}, then stratum weights are
     normalized so as to sum to 1.  Defaults to \code{TRUE}.}
+  \item{impfn}{A function to impute missing values when
+    \code{na.rm=TRUE}. Currently \code{\link{median}}. To impute means
+    use \code{\link{mean.default}}.}
 }
 \details{
 In the unstratified case, the standardized difference of
 covariate means is the mean in the treatment group minus
-the mean in the control group, divided by the sd
+the mean in the control group, divided by the sd (standard deviation)
 in the same variable estimated by pooling treatment and control
 group sds on the same variable.  In the stratified case, the
 denominator of the standardized difference remains the same but
@@ -77,82 +82,110 @@ the sums of these means and the covariates' regressions on either the treatment
 variable, in the unstratified (``pre'') case, or the treatment variable
 and the strata, in the stratified (``post'') case.
 
-\code{stratum.weights} can be either a function or a
-    numeric vector of weights.  If it is a numeric vector, it should be
-    nonnegative and it should have stratum names as its names. (I.e.,
-    its names should be equal to the levels of the factor specified by \code{strata}.) If it is a function, it should accept one
-    argument, a data frame containing the variables in \code{data} and
-    additionally \code{Tx.grp} and \code{stratum.code}, and return a
-    vector of nonnegative weights with stratum codes as names; for an
-    example, do \code{getFromNamespace("harmonic",
-      "RItools")}.
+\code{stratum.weights} can be either a function or a numeric vector of
+    weights.  If it is a numeric vector, it should be nonnegative and it
+    should have stratum names as its names. (i.e., its names should be
+    equal to the levels of the factor specified by \code{strata}.) If it
+    is a function, it should accept one argument, a data frame
+    containing the variables in \code{data} and additionally
+    \code{Tx.grp} and \code{stratum.code}, and return a vector of
+    nonnegative weights with stratum codes as names; for an example, do
+    \code{getFromNamespace("harmonic", "RItools")}.
 
-    If \code{covariate.scaling} is not \code{NULL}, no scaling is
-  applied. This behavior is
-    likely to change in future versions.  (If you want no scaling, set
-  \code{covariate.scaling=1}, as this is likely to retain this meaning
-  in the future.)
-  }
+  If \code{covariate.scaling} is not \code{NULL}, no scaling is
+  applied. This behavior is likely to change in future versions.  (If
+  you want no scaling, set \code{covariate.scaling=1}, as this is likely
+  to retain this meaning in the future.)
+
+   \code{adj.mean.diffs.null.sd} returns the standard deviation of the
+   Normal approximated randomization distribution of the strata-adjusted
+   difference of means under the strict null of no effect.
+ }
   
-  \value{ A data frame with as many rows as there were covariates and
-    levels of covariates in \code{fmla} and columns including some or
-    all of
-    \code{XX.difference}, \code{XX.z}, \code{XX.difference},
-    \code{XX.z}, \code{XX.p}, \code{XX.Tx.eq.0}, \code{XX.Tx.eq.1}, where XX ranges
-    over the stratifying variables given in \code{strata}.  If
-    \dQuote{chisquare.test} is in \code{report}, then the
-    data frame also has attributes \code{XX.chisquare} and \code{XX.df}.  Its class is
-    \code{c("xbal", "data.frame")}.  There are plot and
-    print methods for class \code{"newbal"}; the print method is
+  \value{An object of class 
+    \code{c("xbal", "list")}.  There are plot,
+    print, and xtable methods for class \code{"xbal"}; the print method is
     demonstrated in the examples.  }
 
-\note{
-Evidence pertaining to the hypothesis that treatment variable is not associated with differences in covariate values is assessed by comparing the differences (or
-regression coefficients), without standardization, to their
-distributions under hypothetical shuffles of the treatment variable, a
-permutation or randomization distribution.  For the unstratified
-comparison, this reference distribution consists of differences (more
-generally, regression coefficients) when the treatment variable is
-permuted without regard to strata.  For the stratified comparison, the
-reference distribution is determined by randomly permuting the treatment
-variable within strata, then re-calculating the treatment-control
-differences (regressions of each covariate on the permuted treatment
-variable). Significance assessments are based on the large-sample Normal
-approximation to these reference distributions.
-}
-\references{Hansen, B.B. and Bowers, J. (2008), ``Covariate Balance in
-  Simple, Stratified and Clustered Comparative Studies,''
-  \emph{Statistical Science} \bold{23}.
+  \note{
+    Evidence pertaining to the hypothesis that a treatment variable is not
+    associated with differences in covariate values is assessed by
+    comparing the differences of means (or regression coefficients), without
+    standardization, to their distributions under hypothetical shuffles
+    of the treatment variable, a permutation or randomization
+    distribution.  For the unstratified comparison, this reference
+    distribution consists of differences (more generally, regression
+    coefficients) when the treatment variable is permuted without regard
+    to strata.  For the stratified comparison, the reference
+    distribution is determined by randomly permuting the treatment
+    variable within strata, then re-calculating the treatment-control
+    differences (regressions of each covariate on the permuted treatment
+    variable). Significance assessments are based on the large-sample
+    Normal approximation to these reference distributions.
+  }
 
-  Kalton, G. (1968),
-``Standardization: A technique to control for extraneous variables,''
-\emph{Applied Statistics} \bold{17}, 118--136.}
-\author{Ben Hansen and Jake Bowers}
+  \references{
+
+    Hansen, B.B. and Bowers, J. (2008), ``Covariate Balance in Simple,
+    Stratified and Clustered Comparative Studies,'' \emph{Statistical
+    Science} \bold{23}.
+
+  Kalton, G. (1968), ``Standardization: A technique to control for
+  extraneous variables,'' \emph{Applied Statistics} \bold{17}, 118--136.
+
+}
+\author{Ben Hansen and Jake Bowers and Mark Fredrickson}
 
 
 \examples{
 data(nuclearplants)
-
+##No strata, default output
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data=nuclearplants)
 
+##No strata, all output
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data=nuclearplants,
-         report=c("adj.means","adj.mean.diffs","std.diffs", "z.scores", "chisquare.test"))
+         report=c("all"))
 
+##Stratified, all output
 xBalance(pr~.-cost-pt, strata=factor(nuclearplants$pt), data=nuclearplants, 
-         report=c("adj.means","adj.mean.diffs","std.diffs", "z.scores", "chisquare.test"))
+         report=c("adj.means","adj.mean.diffs","adj.mean.diffs.null.sd",
+      "chisquare.test","std.diffs","z.scores","p.values"))
 
+##Comparing unstratified to stratified, just adjusted means and omnibus test
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
          strata=list(unstrat=NULL, pt=~pt),
          data=nuclearplants,
          report=c("adj.means", "chisquare.test"))
 
+##Comparing unstratified to stratified, just adjusted means and omnibus test
 xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
          strata=data.frame(unstrat=factor('none'),
            pt=factor(nuclearplants$pt)),
          data=nuclearplants,
          report=c("adj.means", "chisquare.test"))
 
+##Missing data handling.
+testdata<-nuclearplants
+testdata$date[testdata$date<68]<-NA
+
+xBalance(pr ~ date, data = testdata, report="all") ##na.rm=FALSE by default
+xBalance(pr ~ date, data = testdata, na.rm = TRUE,report="all")
+
+##To match versions of RItools 0.1-9 and older, impute means rather than medians.
+##Not run, impfn option is not implemented in the most recent version
+xBalance(pr ~ date, data = testdata, na.rm = FALSE,report="all",impfn=mean.default)
+
+xb1<-xBalance(pr ~ date, data = testdata, na.rm = TRUE,report="all", impfn=median.default)
+xb2<-xBalance(pr ~ date, data = testdata, na.rm = TRUE,report="all", impfn=mean.default)
+all.equal(xb1,xb2)
+
+mean.imputed.dat<-RItools:::naImpute(pr~date,testdata,impfn=mean.default,na.rm=TRUE)
+RItools:::naImpute(pr~date,testdata,impfn=mean.default,na.rm=TRUE) ##naImpute returns a data.frame
+mean.default(testdata$date,na.rm=TRUE)
+
+RItools:::naImpute(pr~date,testdata,na.rm=TRUE)
+median.default(testdata$date,na.rm=TRUE)
 
 }
-\keyword{nonparametric}% at least one, from doc/KEYWORDS
+\keyword{design, nonparametric}% at least one, from doc/KEYWORDS
 

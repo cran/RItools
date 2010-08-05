@@ -22,14 +22,19 @@
   \item{\dots}{ Other arguments to \code{\link{print.xbal}} }
 }
 \details{
+  The resulting LaTeX will present one row for each variable in the formula originally
+  passed to \code{\link{xBalance}}, using the variable name used in the
+  original formula. If you wish to have reader friendly labels instead of the
+  orginal variables names, see the code examples below.
+
   To get decimal aligned
   columns, specify \code{align=c("l", rep(".", <ncols>))}, where
   \code{<ncols>} is the number of columns to be printed, in your
   call to \code{xtable}.  Then use the dcolumn package and define
   \samp{'.'} within LaTeX: 
-add the lines \code{\\usepackage\{dcolumn\}} and
-\code{\\newcolumntype\{.\}\{D\{.\}\{.\}\{2.2\}\}} to your LaTeX
-document's preamble.  
+  add the lines \code{\\usepackage\{dcolumn\}} and
+  \code{\\newcolumntype\{.\}\{D\{.\}\{.\}\{2.2\}\}} to your LaTeX
+  document's preamble.  
 }
 \value{
  This function produces an xtable object which can then be printed with
@@ -43,22 +48,33 @@ document's preamble.
 %}
 %\seealso{ ~~objects to See Also as \code{\link{help}}, ~~~ }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
 data(nuclearplants)
 require(xtable)
 
-xb1<-xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
-             strata=data.frame(unstrat=factor(character(32)),
-               pt=factor(nuclearplants$pt)),
-             data=nuclearplants,
-             report=c('adj.means','adj.mean.diffs','std.diffs', 'z.scores', 'chisquare.test','p.values'))
+# Test balance on a variety of variables, with the 'pr' factor indicating
+# which sites are control and treatment units, with stratification by
+# the 'pt' factor to group similar sites
+xb1 <- xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
+                strata = data.frame(unstrat = factor(character(32)),
+                pt = factor(nuclearplants$pt)),
+                data = nuclearplants,
+                report = c('adj.means', 'adj.mean.diffs', 'std.diffs',
+                           'z.scores', 'chisquare.test', 'p.values'))
 
-xb1.xtab<-xtable(xb1) ##right aligned
-##xb1.xtab<-xtable(xb1,align = c("l",rep(".",ncol(xvardf)))) ##decimal aligned, see Details above. 
-print(xb1.xtab,add.to.row=attr(xb1.xtab,"latex.add.to.row"),hline.after=c(0,nrow(xb1.xtab)),sanitize.text.function=function(x){x},floating=TRUE,floating.environment="sidewaystable")
+xb1.xtab <- xtable(xb1) # This table has right aligned columns
+
+# Add user friendly names in the final table
+rownames(xb1.xtab) <- c("Date", "Application to Contruction Time", 
+"License to Construction Time", "Net Capacity", "Northeast Region", "Cooling Tower",
+"Babcock-Wilcox Steam", "Cumlative Plants")
+
+print(xb1.xtab, 
+      add.to.row = attr(xb1.xtab, "latex.add.to.row"),
+      hline.after = c(0, nrow(xb1.xtab)),
+      sanitize.text.function = function(x){x},
+      floating = TRUE,
+      floating.environment = "sidewaystable")
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -1,5 +1,6 @@
-naImpute <- function(FMLA,DATA)
+naImpute <- function(FMLA,DATA,impfn=median,na.rm=TRUE)
 {
+  if(!all("na.rm" %in% names(formals(impfn)))){stop("The imputation function requires a na.rm argument like that of mean.default() or median()")}
   fmla.rhs <- terms.formula(if (length(FMLA)>2) FMLA[-2] else FMLA,
                         dat=DATA, keep.order=TRUE)
   dat <- get_all_vars(fmla.rhs,DATA)
@@ -29,10 +30,10 @@ naImpute <- function(FMLA,DATA)
             } else {
               if (is.logical(x))
                 {
-                  x[is.na(x)] <- mean(x,na.rm=TRUE)>.5
+                  x[is.na(x)] <- impfn(x,na.rm=na.rm)>.5
                 } else
               {
-                x[is.na(x)] <- mean(x,na.rm=TRUE)
+                x[is.na(x)] <- impfn(x,na.rm=na.rm)
               }
             }
         }

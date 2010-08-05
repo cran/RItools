@@ -3,11 +3,11 @@ xBalance <- function(fmla, strata=NULL,
                      report=c("std.diffs","z.scores"),
 #                     include.means=FALSE, chisquare.test=FALSE,
                      stratum.weights=harmonic, na.rm=FALSE,
-                     covariate.scaling=NULL, normalize.weights=TRUE)
+                     covariate.scaling=NULL, normalize.weights=TRUE,impfn=median)
 {
   stopifnot(class(fmla)=="formula",
-            all(report %in% c("adj.means","adj.mean.diffs","chisquare.test",
-                              "std.diffs","z.scores","p.values")),
+            all(report %in% c("adj.means","adj.mean.diffs","adj.mean.diffs.null.sd","chisquare.test",
+                              "std.diffs","z.scores","p.values","all")),
             is.null(strata) || is.factor(strata) || is.list(strata),
             !is.data.frame(strata) || !any(is.na(names(strata))),
             !is.data.frame(strata) || all(names(strata)!=""),
@@ -17,14 +17,16 @@ xBalance <- function(fmla, strata=NULL,
              all(sapply(strata, function(x) (is.null(x) | "formula" %in% class(x))))),
             is.null(data) || is.data.frame(data)
             )
-
+ 
+  if("all" %in% report){report<-c("adj.means","adj.mean.diffs","adj.mean.diffs.null.sd","chisquare.test",
+                              "std.diffs","z.scores","p.values")}
 ### NA Handling ##  
   if (na.rm==TRUE)
     {
-  tfmla <- terms.formula(fmla,dat=data, keep.order=TRUE) 
-} else
+      tfmla <- terms.formula(fmla,dat=data, keep.order=TRUE) 
+    } else
   {
-    data <- naImpute(fmla,data)
+    data <- naImpute(fmla,data,impfn)
     tfmla <- attr(data, 'terms')
   }
 ### End NA handling ###
@@ -34,7 +36,7 @@ xBalance <- function(fmla, strata=NULL,
     stop("fmla must specify a treatment group variable")
 
   zz <- eval(tfmla[[2]], data, parent.frame()) # changed for v.93, see comment in log
-  zzname<-as.character(tfmla[[2]])
+  zzname<- deparse(tfmla[[2]])
   if (!is.numeric(zz) & !is.logical(zz))
     stop("LHS of fmla should be logical or numeric")
   if (any(is.na(zz))) stop('NAs on LHS of fmla not allowed.')
@@ -67,9 +69,9 @@ mm1 <- xBalance.makeMM(tfmla,data)
   }
 ### End prepare ss.df, data frame of strata
 
-gs.df <- xBalance.find.goodstrats(ss.df,zz,mm1)
+  gs.df <- xBalance.find.goodstrats(ss.df,zz,mm1)
   
-swt.ls <- xBalance.make.stratwts(stratum.weights,ss.df, gs.df, zz, data, normalize.weights)
+  swt.ls <- xBalance.make.stratwts(stratum.weights,ss.df, gs.df, zz, data, normalize.weights)
 
   s.p <- if (is.null(covariate.scaling)) {xBalance.makepooledsd(zz,mm1,dim(mm1)[1])
                                         } else 1
