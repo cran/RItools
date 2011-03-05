@@ -10,7 +10,9 @@
   within strata.
 }
 \usage{
-xBalance(fmla, strata=NULL, data, report=c("std.diffs","z.scores"),
+xBalance(fmla, strata=list(unstrat=NULL), data, report=c("std.diffs","z.scores","adj.means",
+	       "adj.mean.diffs","adj.mean.diffs.null.sd",
+	       "chisquare.test","p.values", "all")[1:2],
          stratum.weights=harmonic, na.rm=FALSE,
          covariate.scaling=NULL,
          normalize.weights=TRUE,impfn=median)
@@ -19,8 +21,8 @@ xBalance(fmla, strata=NULL, data, report=c("std.diffs","z.scores"),
 \arguments{
   \item{fmla}{ A formula containing an indicator of treatment
   assignment on the left hand side and covariates at right. }
-  \item{strata}{ \code{NULL}, a list of right-hand-side-only formulas containing the factor(s) identifying the strata, a factor with length equal to the number of rows
-    in data, or a data frame of such factors. See below for examples. }
+  \item{strata}{A list of right-hand-side-only formulas containing the factor(s) identifying the strata, with \code{NULL} entries interpreted as no stratification; or a factor with length equal to the number of rows
+    in data; or a data frame of such factors. See below for examples. }
   \item{data}{ A data frame in which \code{fmla} and \code{strata} are 
     to be evaluated.}
   \item{report}{Character vector listing measures to report for each

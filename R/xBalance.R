@@ -1,6 +1,7 @@
-xBalance <- function(fmla, strata=NULL,
+xBalance <- function(fmla, strata=list(unstrat=NULL),
                      data,
-                     report=c("std.diffs","z.scores"),
+                     report=c("std.diffs","z.scores","adj.means","adj.mean.diffs","adj.mean.diffs.null.sd",
+                       "chisquare.test","p.values", "all")[1:2],
 #                     include.means=FALSE, chisquare.test=FALSE,
                      stratum.weights=harmonic, na.rm=FALSE,
                      covariate.scaling=NULL, normalize.weights=TRUE,impfn=median)
@@ -12,12 +13,12 @@ xBalance <- function(fmla, strata=NULL,
             !is.data.frame(strata) || !any(is.na(names(strata))),
             !is.data.frame(strata) || all(names(strata)!=""),
             !is.data.frame(strata) || all(sapply(strata, is.factor)),
-            !is.list(strata) ||
-            (is.data.frame(strata) |
-             all(sapply(strata, function(x) (is.null(x) | "formula" %in% class(x))))),
             is.null(data) || is.data.frame(data)
             )
- 
+  if (is.null(strata)) warning("Passing NULL as a 'strata=' argument is depracated;\n for balance w/o stratification pass 'list(nostrat=NULL)' instead.\n (Or did you mean to pass a non-NULL 'strata=' argument? Then check for typos.)")
+  if (is.list(strata) && !is.data.frame(strata) &&
+      !all(sapply(strata, function(x) (is.null(x) | inherits(x,"formula"))))
+      ) stop("For balance against multiple alternative stratifications,\n please make 'strata' either a data frame or a list containing formulas or NULL entries.")
   if("all" %in% report){report<-c("adj.means","adj.mean.diffs","adj.mean.diffs.null.sd","chisquare.test",
                               "std.diffs","z.scores","p.values")}
 ### NA Handling ##  
