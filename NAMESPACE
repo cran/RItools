@@ -1,3 +1,7 @@
+export(balanceplot)
+import(abind)
+S3method(plot,xbal)
+S3method(subset,xbal)
 
 importFrom("lattice", levelplot)
 importFrom("graphics", image)
@@ -5,6 +9,8 @@ importFrom("utils", head, tail)
 importFrom("grid", grid.rect, gpar, grob)
 importFrom("stats", deviance, formula, coef)
 importFrom("xtable", xtable)
+importFrom("svd", propack.svd)
+
 importClassesFrom("SparseM", "matrix.csr")
 importMethodsFrom("SparseM", "t", "%*%","as.matrix")
 

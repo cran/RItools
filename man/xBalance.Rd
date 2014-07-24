@@ -10,12 +10,16 @@
   within strata.
 }
 \usage{
-xBalance(fmla, strata=list(unstrat=NULL), data, report=c("std.diffs","z.scores","adj.means",
+xBalance(fmla,
+         strata = list(unstrat=NULL),
+         data,
+         report=c("std.diffs","z.scores","adj.means",
 	       "adj.mean.diffs","adj.mean.diffs.null.sd",
 	       "chisquare.test","p.values", "all")[1:2],
          stratum.weights=harmonic, na.rm=FALSE,
          covariate.scaling=NULL,
-         normalize.weights=TRUE,impfn=median)
+         normalize.weights=TRUE,impfn=median,
+         post.alignment.transform=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -53,13 +57,14 @@ xBalance(fmla, strata=list(unstrat=NULL), data, report=c("std.diffs","z.scores",
   \item{impfn}{A function to impute missing values when
     \code{na.rm=TRUE}. Currently \code{\link{median}}. To impute means
     use \code{\link{mean.default}}.}
+  \item{post.alignment.transform}{Optional transformation applied to covariates just after their stratum means are subtracted off.}
 }
 \details{
 In the unstratified case, the standardized difference of
 covariate means is the mean in the treatment group minus
-the mean in the control group, divided by the sd (standard deviation)
+the mean in the control group, divided by the S.D. (standard deviation)
 in the same variable estimated by pooling treatment and control
-group sds on the same variable.  In the stratified case, the
+group S.D.s on the same variable.  In the stratified case, the
 denominator of the standardized difference remains the same but
 the numerator is a weighted average of within-stratum differences
 in means on the covariate.  By default, each stratum is weighted in proportion
@@ -76,7 +81,7 @@ case pooling these regressions across strata using weights that default
 to the stratum-wise sum of squared deviations of the treatment variable
 from its stratum mean.  (Applied to binary treatment variables, this
 recipe gives the same result as the one given above.)  In the numerator
-of the standardized difference, we get a ``pooled sd'' from separating
+of the standardized difference, we get a ``pooled S.D.'' from separating
 units into two groups, one in which the treatment variable is 0 or less
 and another in which it is positive.  If \code{report} includes "adj.means",
 covariate means for the former of these groups are reported, along with
@@ -85,13 +90,13 @@ variable, in the unstratified (``pre'') case, or the treatment variable
 and the strata, in the stratified (``post'') case.
 
 \code{stratum.weights} can be either a function or a numeric vector of
-    weights.  If it is a numeric vector, it should be nonnegative and it
+    weights.  If it is a numeric vector, it should be non-negative and it
     should have stratum names as its names. (i.e., its names should be
     equal to the levels of the factor specified by \code{strata}.) If it
     is a function, it should accept one argument, a data frame
     containing the variables in \code{data} and additionally
     \code{Tx.grp} and \code{stratum.code}, and return a vector of
-    nonnegative weights with stratum codes as names; for an example, do
+    non-negative weights with stratum codes as names; for an example, do
     \code{getFromNamespace("harmonic", "RItools")}.
 
   If \code{covariate.scaling} is not \code{NULL}, no scaling is
@@ -105,8 +110,8 @@ and the strata, in the stratified (``post'') case.
  }
   
   \value{An object of class 
-    \code{c("xbal", "list")}.  There are plot,
-    print, and xtable methods for class \code{"xbal"}; the print method is
+    \code{c("xbal", "list")}.  There are \code{plot},
+    \code{print}, and \code{xtable} methods for class \code{"xbal"}; the \code{print} method is
     demonstrated in the examples.  }
 
   \note{
@@ -176,17 +181,6 @@ xBalance(pr ~ date, data = testdata, na.rm = TRUE,report="all")
 ##To match versions of RItools 0.1-9 and older, impute means rather than medians.
 ##Not run, impfn option is not implemented in the most recent version
 xBalance(pr ~ date, data = testdata, na.rm = FALSE,report="all",impfn=mean.default)
-
-xb1<-xBalance(pr ~ date, data = testdata, na.rm = TRUE,report="all", impfn=median.default)
-xb2<-xBalance(pr ~ date, data = testdata, na.rm = TRUE,report="all", impfn=mean.default)
-all.equal(xb1,xb2)
-
-mean.imputed.dat<-RItools:::naImpute(pr~date,testdata,impfn=mean.default,na.rm=TRUE)
-RItools:::naImpute(pr~date,testdata,impfn=mean.default,na.rm=TRUE) ##naImpute returns a data.frame
-mean.default(testdata$date,na.rm=TRUE)
-
-RItools:::naImpute(pr~date,testdata,na.rm=TRUE)
-median.default(testdata$date,na.rm=TRUE)
 
 }
 \keyword{design, nonparametric}% at least one, from doc/KEYWORDS

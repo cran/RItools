@@ -44,12 +44,12 @@ xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 #####################################################
 ###### Factor handling
 #####################################################
-###a0 <- xBalance(pr~ date + t1 + t2 + cap + CUM.N, 
+###a0 <- xBalance(pr~ date + t1 + t2 + cap + CUM.N,
 ###               ~factor(pt),
 ###               data.frame(nuclearplants,
 ###                          CUM.N=cut(nuclearplants$cum.n, c(0,2,5,21), include=TRUE)),
 ###               chisq=FALSE)
-###xBalance(pr~ date + t1 + t2 + cap + CUM.N, 
+###xBalance(pr~ date + t1 + t2 + cap + CUM.N,
 ###         ~factor(pt),
 ###         data.frame(nuclearplants,
 ###                    CUM.N=cut(nuclearplants$cum.n, c(0,2,5,21), include=TRUE)),
@@ -114,7 +114,7 @@ xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###
 ###### ** If stratum.weights is a function, it should
 ###### find v-bles within its data argument.
-###pr <- nuclearplants$pr ; pr[which.max(pr)] <- 0 
+###pr <- nuclearplants$pr ; pr[which.max(pr)] <- 0
 ###(not.hmnic.wts <- tapply(pr, nuclearplants$pt,
 ###                        function(x) {1/(1/sum(x) + 1/sum(!x))}) )
 ###identical(b0, # This should be FALSE
@@ -128,7 +128,7 @@ xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###                     function(x) {1/(1/sum(x) + 1/sum(!x))})} ) )
 ###
 ###### ** If stratum.weights is a function, its
-###### evaluation should within xBalance's 
+###### evaluation should within xBalance's
 ###### parent frame for objects.
 ###PT <- nuclearplants$pt
 ###identical(b0, # Should be TRUE
@@ -153,17 +153,17 @@ xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###             stratum.weights=unlist(list('0'='a', '1'='b')) ) )
 ###
 ###### Non-binary "treatment" variable.
-###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n, 
+###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###         ~factor(pt), nuclearplants)
 ###
-###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n, 
+###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###         ~factor(pt), nuclearplants)
 ###
-###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n, 
+###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###         ~factor(pt), nuclearplants,
 ###         stratum.weights=my.hmnic.wts)
 ###
-###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n, 
+###xBalance(cost~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###         ~factor(pt), nuclearplants,
 ###         stratum.weights=function(data){tapply(data$pr, data$pt,
 ###                     function(x) {1/(1/sum(x) + 1/sum(!x))})} )
@@ -200,10 +200,11 @@ xBalance(I(pr==1) ~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 #####################################################
 if (require('xtable'))
   {
-xtable(xb0)
-xtable(xb0, caption="Caption!", label="thetable", digits=1,
+  xtablea <- xtable(xb0)
+  xtableb <- xtable(xb0, caption="Caption!", label="thetable", digits=1,
        align=rep('l', prod(dim(xb0$result)[2:3])+1),
-       display=c('s', rep(c(rep('fg',5), 's'),2)) #,col.labels= do this one later
+       display=c('s', rep(c(rep('fg', dim(xb0$result)[2]-1), 's'),
+         dim(xb0$result)[3]) ) #,col.labels= do this one later
        )
   }
 
@@ -211,10 +212,10 @@ xtable(xb0, caption="Caption!", label="thetable", digits=1,
 #####################################################
 ######               include.means                ###
 #####################################################
-###xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n, 
+###xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###         ~factor(pt), nuclearplants,
 ###         covariate.scaling=1, include.means=TRUE)
-###xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n, 
+###xBalance(pr~ date + t1 + t2 + cap + ne + ct + bw + cum.n,
 ###         ~factor(pt), nuclearplants, include.means=TRUE)
 ###
 ###
@@ -227,7 +228,7 @@ set.seed(123)
 testdata<-nuclearplants
 testdata$date[sample(1:32,10)]<-NA
 
-xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data = testdata, 
+xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.n, data = testdata,
     na.rm = FALSE,impfn=mean.default) ##first using the mean to match up with previous versions
 
 #####################################################
@@ -239,7 +240,7 @@ testdata$cum.nF<-factor(testdata$cum.n)
 
 ##Notice that for most levels of cum.n, there are no obs in one of the two strata
 table(testdata$pt,testdata$cum.n)
-   
+
 ##    1 2 3 5 6 7 8 11 12 14 15 16 17 18 19 20 21
 ##  0 4 3 4 2 1 1 1  0  2  1  1  1  1  1  1  1  1
 ##  1 0 0 0 0 0 1 2  3  0  0  0  0  0  0  0  0  0
@@ -259,6 +260,17 @@ xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata
 xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=TRUE,impfn=mean.default)
 
 
+#####################################################
+######  handling factor with no levels strata=argument  ###
+#####################################################
+try(xBalance(pr ~ date,
+             strata=data.frame(nastrat=factor(rep(NA,nrow(testdata))) ),
+             data=testdata), FALSE)
+
+xBalance(pr ~ date,
+         strata=data.frame(nostrata=factor(rep('a',nrow(testdata))),
+           nastrat=factor(rep(NA,nrow(testdata))) ),
+         data=testdata)
 #####################################################
 ######             WISHLIST                       ###
 #####################################################
