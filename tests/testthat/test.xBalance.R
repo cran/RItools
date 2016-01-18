@@ -1,7 +1,8 @@
 ################################################################################
 # Tests for xBalance function
 ################################################################################
-
+## if working interactively in inst/tests you'll need
+## library(RItools, lib.loc = '../../.local')
 library("testthat")
 
 context("xBalance Functions")
@@ -28,7 +29,7 @@ test_that("xBalance returns covariance of tests", {
                   data = as.data.frame(dat),
                   report = 'all',
                   strata = list("Unadj" = NULL,
-                      "Adj"   = ~ s))
+                                "s"   = ~ s))
 
   tcov <- attr(res$overall, "tcov")
 
@@ -40,6 +41,57 @@ test_that("xBalance returns covariance of tests", {
   # variance should be the squares of the reported null SDs
   expect_equal(sqrt(diag(tcov[[1]])), res$results[, "adj.diff.null.sd", 1])
   expect_equal(sqrt(diag(tcov[[2]])), res$results[, "adj.diff.null.sd", 2])
+
+})
+
+test_that("strata in formula", {
+  set.seed(20130801)
+  n <- 500
+
+  library(MASS)
+  xs <- mvrnorm(n,
+                mu = c(1,2,3),
+                Sigma = matrix(c(1, 0.5, 0.2,
+                                 0.5, 1, 0,
+                                 0.2, 0, 1), nrow = 3, byrow = T))
+  colnames(xs) <- c("X1", "X2", "X3")
+
+  p <- plogis(xs[,1]- 0.25 * xs[,2] - 1)
+  z <- rbinom(n, p = p, size = 1)
+  s <- rep(c(0,1), each = n/2)
+  s2 <- rep(rep(c(0,1), each=n/4), 2)
+
+  dat <- cbind(z, xs, s, s2)
+
+
+  res <- xBalance(z ~ . - s - s2,
+                  data = as.data.frame(dat),
+                  report = 'all',
+                  strata = list("Unadj" = NULL,
+                                "s"     = ~ s))
+
+  res2 <- xBalance(z ~ . - s - s2 + strata(s),
+                   data = as.data.frame(dat),
+                   report = 'all')
+
+  expect_true(all.equal(res, res2, check.attributes=FALSE))
+
+
+
+  res3 <- xBalance(z ~ . - s - s2,
+                   data = as.data.frame(dat),
+                   report = 'all',
+                   strata = list("Unadj" = NULL,
+                                 "s"     = ~ s,
+                                 "s2"    = ~ s2))
+
+  res4 <- xBalance(z ~ . - s - s2 + strata(s) + strata(s2),
+                   data = as.data.frame(dat),
+                   report = 'all')
+
+  expect_true(all.equal(res3, res4, check.attributes=FALSE))
+
+
 })
 
 test_that("partial arguments to report", {
@@ -111,7 +163,7 @@ test_that("Passing post.alignment.transform, #26", {
   res1 <- xBalance(pr ~ ., data=nuclearplants)
   res2 <- xBalance(pr ~ ., data=nuclearplants, post.alignment.transform = function(x) x)
 
-  expect_true(identical(res1, res2))
+  expect_true(all.equal(res1, res2)) ## allow for small numerical differences
 
   res3 <- xBalance(pr ~ ., data=nuclearplants, post.alignment.transform = rank)
 
@@ -119,5 +171,22 @@ test_that("Passing post.alignment.transform, #26", {
 
   expect_error(xBalance(pr ~ ., data=nuclearplants, post.alignment.transform = mean),
                "Invalid post.alignment.transform given")
+
+  res4 <- xBalance(pr ~ ., data=nuclearplants, post.alignment.transform = rank, report="all")
+  res5 <- xBalance(pr ~ ., data=nuclearplants, report="all")
+
+  expect_false(isTRUE(all.equal(res4,res5)))
+
+  # a wilcoxon rank sum test, asymptotic and w/o continuity correction
+  res6 <- xBalance(pr ~ cost, data=nuclearplants, post.alignment.transform = rank, report="all")
+
+  expect_equal(res6$results["cost", "p", "unstrat"],
+               wilcox.test(cost~pr, data=nuclearplants, exact=FALSE, correct=FALSE)$p.value)
+
+  # w/ one variable, chisquare p value should be same as p value on that variable
+  expect_equal(res6$results["cost", "p", "unstrat"],
+               res6$overall["unstrat","p.value"])
+
+  # to dos: test combo of a transform with non-default stratum weights.
 
 })
