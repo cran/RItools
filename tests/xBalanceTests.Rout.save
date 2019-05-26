@@ -1,7 +1,7 @@
 
-R version 3.3.0 (2016-05-03) -- "Supposedly Educational"
-Copyright (C) 2016 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
+R Under development (unstable) (2019-05-25 r76601) -- "Unsuffered Consequences"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -338,7 +338,7 @@ Loading required package: xtable
             strata  unstrat                
             stat   std.diff    z           
 vars                                       
-date                0.0203  0.0541         
+date                0.0305  0.0812         
 t1                  0.1063  0.2830         
 t2                  1.0327  2.4674  *      
 cap                 0.3401  0.8948         
@@ -346,7 +346,7 @@ ne                  -0.1631 -0.4334
 ct                  -0.3080 -0.8121        
 bw                  0.0451  0.1202         
 cum.n               -0.0976 -0.2598        
-date.NATRUE         -1.0660 -2.5308 *      
+date.NATRUE         0.5922  1.5185         
 > 
 > #####################################################
 > ######  handling factor with no obs for a level in a strata  ###
@@ -402,11 +402,10 @@ cum.nF21         -0.2548 -0.6742          -0.2282 -0.6070
 > testdata$cum.nF[testdata$cum.n>16]<-NA
 > testdata$cum.nF[testdata$cum.n==7]<-NA
 > table(testdata$pt,testdata$cum.nF,exclude=c()) ##Notice that the levels don't disappear by default.
-      
-       1 2 3 5 6 7 8 11 12 14 15 16 17 18 19 20 21 <NA>
-  0    4 3 4 2 1 0 1  0  2  1  1  1  0  0  0  0  0    6
-  1    0 0 0 0 0 0 2  3  0  0  0  0  0  0  0  0  0    1
-  <NA> 0 0 0 0 0 0 0  0  0  0  0  0  0  0  0  0  0    0
+   
+    1 2 3 5 6 7 8 11 12 14 15 16 17 18 19 20 21 <NA>
+  0 4 3 4 2 1 0 1  0  2  1  1  1  0  0  0  0  0    6
+  1 0 0 0 0 0 0 2  3  0  0  0  0  0  0  0  0  0    1
 > xBalance(pr ~ date + t1 + t2 + cap + ne + ct + bw + cum.nF, strata=list(nostrata=NULL,thept=~pt), data = testdata,na.rm=FALSE,impfn=mean.default)
           strata nostrata                    thept                
           stat   std.diff    z            std.diff    z           
@@ -495,4 +494,4 @@ date          -0.115  -0.305
 > 
 > proc.time()
    user  system elapsed 
-  1.613   0.118   1.803 
+  2.774   0.220   2.995 

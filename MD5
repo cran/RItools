@@ -1,4 +1,4 @@
-1e69b0b5b3eb654013655ec01384aa9e *DESCRIPTION
+274465955f76e4881da1dd60dcd718df *DESCRIPTION
 946d371c4b06c1f656debab4b89b7c1e *NAMESPACE
 fb9f2d7fa1c2c605fd5d056c3873ff7b *NEWS.md
 f24a226cde17083913e6d650240e093b *R/data.R
@@ -49,6 +49,6 @@ eae6e48ebb60e723bc9e90a79c7a8b9d *man/xtable.xbal.Rd
 1b79ea8ca3970384889f7c3ef80adf2d *tests/testthat/test.utils.R
 82d1ffb396ee49c837325c13d17ef2d8 *tests/testthat/test.xBalance.R
 72a75f6e8b19ecc63f75c4d74bd369b1 *tests/xBalanceTests.R
-407c2fc6b51c73d8776384b7bb6c8981 *tests/xBalanceTests.Rout.save
+95669018ce9f3441069fe192112688ef *tests/xBalanceTests.Rout.save
 46a3d41c914c15f75ddba7d9cad6a18b *tests/xBalanceTests2.R
 7e4897ccc2ac4315b10c93a6f050f582 *tests/xBalanceTests2.Rout.save
