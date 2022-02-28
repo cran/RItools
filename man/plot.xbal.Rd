@@ -4,9 +4,16 @@
 \alias{plot.xbal}
 \title{Plot of balance across multiple strata}
 \usage{
-\method{plot}{xbal}(x, xlab = "Standardized Differences",
-  statistic = "std.diff", absolute = FALSE, strata.labels = NULL,
-  variable.labels = NULL, groups = NULL, ...)
+\method{plot}{xbal}(
+  x,
+  xlab = "Standardized Differences",
+  statistic = "std.diff",
+  absolute = FALSE,
+  strata.labels = NULL,
+  variable.labels = NULL,
+  groups = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{An object returned by \code{\link{xBalance}}}
@@ -30,6 +37,9 @@ that maps the variables to textual labels.}
 grouped.}
 
 \item{...}{additional arguments to pass to \code{\link{balanceplot}}}
+}
+\value{
+Returns NULL, displays plot
 }
 \description{
 The plot allows a quick visual comparison of the effect of different
