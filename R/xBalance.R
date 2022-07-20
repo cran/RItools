@@ -4,6 +4,11 @@
 ##' independence of the treatment variable and the covariates within
 ##' strata.
 ##'
+##' Note: the newer \code{\link{balanceTest}} function provides the same
+##' functionality as \code{xBalance} with additional support for clustered
+##' designs. While there are no plans to deprecate \code{xBalance}, users are
+##' encouraged to use \code{balanceTest} going forward.
+##'
 ##' In the unstratified case, the standardized difference of covariate
 ##' means is the mean in the treatment group minus the mean in the
 ##' control group, divided by the S.D. (standard deviation) in the
@@ -102,6 +107,9 @@
 ##'   means use \code{\link{mean.default}}.
 ##' @param post.alignment.transform Optional transformation applied to
 ##'   covariates just after their stratum means are subtracted off.
+##' @param pseudoinversion_tol The function uses a singular value decomposition
+##'   to invert a covariance matrix. Singular values less than this tolerance
+##'   will be treated as zero.
 ##' @return An object of class \code{c("xbal", "list")}.  There are
 ##'   \code{plot}, \code{print}, and \code{xtable} methods for class
 ##'   \code{"xbal"}; the \code{print} method is demonstrated in the
@@ -131,7 +139,7 @@
 ##'   118--136.
 ##' @author Ben Hansen and Jake Bowers and Mark Fredrickson
 ##' @keywords design nonparametric
-##' @import SparseM svd
+##' @seealso \code{\link{balanceTest}}
 ##' @examples
 ##' data(nuclearplants)
 ##' ##No strata, default output
@@ -196,7 +204,8 @@ xBalance <- function(fmla, strata=list(unstrat=NULL),
                      #                     include.means=FALSE, chisquare.test=FALSE,
                      stratum.weights=harmonic, na.rm=FALSE,
                      covariate.scaling=NULL, normalize.weights=TRUE,impfn=median,
-                     post.alignment.transform=NULL) {
+                     post.alignment.transform=NULL,
+                     pseudoinversion_tol=.Machine$double.eps) {
   stopifnot(class(fmla)=="formula",
             is.null(strata) || is.factor(strata) || is.list(strata),
             !is.data.frame(strata) || !any(is.na(names(strata))),
@@ -205,27 +214,6 @@ xBalance <- function(fmla, strata=list(unstrat=NULL),
             is.null(data) || is.data.frame(data),
             is.null(post.alignment.transform) || is.function(post.alignment.transform)
             )
-
-  if (any(grepl("strata", fmla))) {
-    splitstrat <- findStrata(fmla, data)
-
-    if (!is.null(splitstrat$strata)) {
-      fmla <- splitstrat$newx
-
-      # apply was giving trouble here; not ideal but we shouldn't
-      # be having more than a few strata, so shouldn't be a
-      # performance hit
-      strata <- list()
-      for (i in paste("~", splitstrat$strata)) {
-        strata <- c(strata, list(formula(i)))
-      }
-
-      names(strata) <- splitstrat$strata
-
-      # Automatically add the unadjusted version. Maybe make this an optional argument later.
-      strata <- c(list("Unadj" = NULL), strata)
-    }
-  }
 
   # Using charmatch instead of pmatch to distinguish between no match and ambiguous match. It reports
   # -1 for no match, and 0 for ambiguous (multiple) matches.
@@ -334,7 +322,8 @@ xBalance <- function(fmla, strata=list(unstrat=NULL),
                                  mm1[gs.df[[nm]],,drop=FALSE],
                                  report, swt.ls[[nm]],
                                  s.p, normalize.weights,zzname,
-                                 post.alignment.transform)
+                                 post.alignment.transform,
+                                 pseudoinversion_tol=pseudoinversion_tol)
                 })
   names(RES) <- names(ss.df)
   ##nms <- paste(rep(names(ss.df), rep(length(RES[[1]]$dfr),length(ss.df))),
@@ -375,6 +364,7 @@ xBalance <- function(fmla, strata=list(unstrat=NULL),
     })
   }
   class(ans) <- c("xbal", "list")
+  attr(ans, "report") <- report
   ans
 }
 
@@ -409,25 +399,4 @@ xBalance.make.stratum.mean.matrix <- function(ss, mm) {
   msmn <- as.matrix(msmn)
 
   return(msmn)
-}
-
-
-# Extract `strata(...)` arguments from a formula.
-findStrata <- function(x, data) {
-
-  t <- terms(x, specials = "strata", data = data)
-
-  strata <- rownames(attr(t, "factors"))[attr(t, "specials")$strata]
-  if (length(strata) > 0) {
-    # Trying to update(x) directly was causing errors about having a "."
-    # and no data. Updating the terms returns a fmla and bypasses the bug.
-    x <- update(terms(x, data=data),
-                as.formula(paste("~ . - ", paste(strata, collapse="-"))))
-
-    # The gsubs return only the `...` inside `strata(...)`
-    return(list(newx = x,
-                strata = gsub("\\)", "", gsub("strata\\(", "", strata))))
-  }
-
-  return(list(newx = x, strata = NULL))
 }

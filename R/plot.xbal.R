@@ -33,6 +33,7 @@
 #' @param groups A vector of group names for each variable in
 #' \code{x$results}. By default, factor level variables will be
 #' grouped.
+#' @param ggplot Use ggplot2 to create figure. By default, uses base R graphics.
 #' @param ... additional arguments to pass to \code{\link{balanceplot}}
 #' @seealso \code{\link{xBalance}}, \code{\link{subset.xbal}}, \code{\link{balanceplot}}
 #' @example inst/examples/plot.xbal.R
@@ -48,15 +49,24 @@ plot.xbal <- function(x,
                       strata.labels = NULL,
                       variable.labels = NULL,
                       groups = NULL,
+                      ggplot = FALSE,
                       ...) {
 
   x <- prepareXbalForPlot(x, statistic, absolute, strata.labels, variable.labels)
 
+
   if (is.null(groups)) {
     groups <- attr(x, "groups")
   }
+  
+  if(ggplot == TRUE){
+      return(balanceTest_ggplot(as.data.frame(x),xlab = xlab, absolute = absolute, strata.labels = strata.labels, groups = groups))
+  } else {
+    return(balanceplot(x, xlab = xlab, groups = groups, ...))
+  }
+}
 
-  return(balanceplot(x, xlab = xlab, groups = groups, ...))
+  
 
   ### NOT RUN: (but saving while we transition to the more general balanceplot function
 
@@ -123,7 +133,7 @@ plot.xbal <- function(x,
   #          pch=thesymbols,
   #          bty="n")
   # }
-}
+
 
 # Internal function for turning an xBalance object into something for `balanceplot`
 prepareXbalForPlot <- function(x,
@@ -155,6 +165,7 @@ prepareXbalForPlot <- function(x,
     }
     rownames(x) <- variable.labels[rownames(x)]
   }
+  names(origs) <- rownames(x)
 
   if (!is.null(strata.labels)) {
     if (is.null(names(strata.labels))) {
@@ -206,8 +217,9 @@ prepareXbalForPlot <- function(x,
 #' \code{\link{points}} function. If the argument is a vector, the
 #' length should be the same as the number of columns in \code{x}. If
 #' the argument is a matrix, it should have the same dims as
-#' \code{x}. The suggested vector has been selected to work with
-#' RSVGTipsDevice tool tips.
+#' \code{x}.
+#' <!-- The suggested vector has been selected to work with
+#' RSVGTipsDevice tool tips.--> 
 #' @param segments.args A list of arguments to pass to the
 #' \code{\link{segments}} function.
 #' @param points.args A list of arguments to pass to the \code{\link{points}} function.
@@ -215,9 +227,17 @@ prepareXbalForPlot <- function(x,
 #' @param xrange The range of x-axis. By default, it is 1.25 times the range of \code{x}.
 #' @param groups A factor that indicates the group of each row in
 #' \code{x}. Groups are printed under a common header.
-#' @param tiptext (Ignored.)
+#' @param tiptext ignored (legacy argument retained for internal reasons)
+#' <!-- If you are using the \code{RSVGTipsDevice} library for
+#' rendering, you can include an array of the dimensions of x
+#' with another dimension of length 2. For example, if there are 4
+#' observations and 2 strata, the array should be 4 by 2 by 2. The
+#' \code{tiptext[i, j, 1]} entry will be the first line of the tool
+#' tip for the data in \code{x[i, j]}. Likewise for the second row of
+#' the tool tip. --> 
 #' @param include.legend Should a legend be included?
 #' @param legend.title An optional title to attach to the legend.
+#' @param plotfun Function to do the plotting; defaults to [RItools:::.balanceplot]
 #' @param ... Additional arguments to pass to \code{\link{plot.default}}.
 #' @seealso \code{\link{plot.xbal}}, \code{\link{xBalance}},
 #' \code{\link{segments}}, \code{\link{points}}
@@ -238,6 +258,7 @@ balanceplot <- function(x,
                         tiptext = NULL,
                         include.legend = TRUE,
                         legend.title = NULL,
+                        plotfun = .balanceplot,
                         ...) {
 
   stopifnot(length( dx <- dim(x) ) == 2, dx >= 1)
@@ -335,7 +356,7 @@ balanceplot <- function(x,
 
   if (is.null(groups)) {
 
-    .balanceplot(x, segments, shapes, colors, segments.args, points.args, 0, tiptext)
+    plotfun(x, segments, shapes, colors, segments.args, points.args, 0, tiptext)
 
   } else {
     offset <- 0
@@ -349,7 +370,7 @@ balanceplot <- function(x,
       subshape <- shapes[idx,, drop = FALSE]
       subcolor <- colors[idx,, drop = FALSE]
 
-      offset <- .balanceplot(subx, segments, subshape, subcolor, segments.args, points.args, offset, subtip)
+      offset <- plotfun(subx, segments, subshape, subcolor, segments.args, points.args, offset, subtip)
 
       axis(2, labels = g, at = offset + 0.25, las = 2, tick = FALSE)
 
@@ -362,7 +383,7 @@ balanceplot <- function(x,
       subtip <- tiptext[nagrp,,, drop = FALSE]
       subshape <- shapes[nagrp,, drop = FALSE]
       subcolor <- colors[nagrp,, drop = FALSE]
-      .balanceplot(subx, segments, subshape, subcolor, segments.args, points.args, offset, subtip)
+      plotfun(subx, segments, subshape, subcolor, segments.args, points.args, offset, subtip)
     }
 
   }
@@ -373,8 +394,8 @@ balanceplot <- function(x,
   if (length(colnames(x)) > 0 && include.legend) {
     legend(x = "topright",
            legend = colnames(x),
-           pch = origshapes,
-           col = origcolors,
+           pch = shapes,
+           col = colors,
            title = legend.title,
            bty = "n")
   }
@@ -406,6 +427,7 @@ balanceplot <- function(x,
                           pch = shapes[j, i],
                           col = colors[j, i]),
                      points.args))
+        
     }
   }
 
@@ -414,3 +436,5 @@ balanceplot <- function(x,
 
   return(offset + n + 1)
 }
+
+

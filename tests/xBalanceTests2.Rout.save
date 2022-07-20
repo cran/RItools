@@ -23,14 +23,6 @@ Type 'q()' to quit R.
 > 
 > require("RItools")
 Loading required package: RItools
-Loading required package: SparseM
-
-Attaching package: 'SparseM'
-
-The following object is masked from 'package:base':
-
-    backsolve
-
 > 
 > data(nuclearplants)
 > 
@@ -145,4 +137,4 @@ cum.n -0.81976744        2.4129633 -0.3397347
 > 
 > proc.time()
    user  system elapsed 
-  0.992   0.093   1.070 
+  0.998   0.107   1.108 
