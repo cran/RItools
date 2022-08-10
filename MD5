@@ -1,7 +1,7 @@
-71de9188a23f534600593107be939fbc *DESCRIPTION
+9b1f248aa716fb48df5b6736b8ab3110 *DESCRIPTION
 df17408ddc7319a20355321cda201532 *NAMESPACE
-0cd8e46c3b75e9fffc232107038fab59 *NEWS.md
-6654ad1d5bf22440960cda302e8c6690 *R/Design.R
+f9b2a171c733bc132a02b4d81f17090a *NEWS.md
+59f2499205024b20614059b94fad114f *R/Design.R
 f5f7265c3ea3126a3718f0b12951a445 *R/balanceTest.R
 51fe320581e125434b2aef7f9a64f07f *R/balanceTest.make.stratwts.R
 0b52c14ca1ec44e648109c546e493f3d *R/balanceTestEngine.R
@@ -72,7 +72,7 @@ aa3736f8a4653f249af35b1c8319dd29 *man/tidy.xbal.Rd
 3e13cb50ff76e1a7ec2ab1ac0a97e63e *man/ym_long.Rd
 83435119bc201a05c90aaba9801fa6ed *man/ym_short.Rd
 4153623bbe2ca0a86424ce06fad91347 *tests/testthat.R
-8961813ad39cb41447da1f3d278dc6be *tests/testthat/test.Design.R
+a6bfbb9c9fa2a338cc3de10bd72b29a0 *tests/testthat/test.Design.R
 fe8c4ea336e04369d06f164ef7030591 *tests/testthat/test.balanceTest.R
 2cacafef03a57ec396bf8b3efb22b181 *tests/testthat/test.clusters.R
 106f9a778a89e99d0c4f2a3f71ae863b *tests/testthat/test.plot.balancetest.R
