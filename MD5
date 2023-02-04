@@ -1,7 +1,7 @@
-9b1f248aa716fb48df5b6736b8ab3110 *DESCRIPTION
+5afbe817d1818ef5ae3ed87365eb7403 *DESCRIPTION
 df17408ddc7319a20355321cda201532 *NAMESPACE
-f9b2a171c733bc132a02b4d81f17090a *NEWS.md
-59f2499205024b20614059b94fad114f *R/Design.R
+a8688157a6b32a5c423017a07fb9f366 *NEWS.md
+71b40a4d9dcd99084d1b206f36772c34 *R/Design.R
 f5f7265c3ea3126a3718f0b12951a445 *R/balanceTest.R
 51fe320581e125434b2aef7f9a64f07f *R/balanceTest.make.stratwts.R
 0b52c14ca1ec44e648109c546e493f3d *R/balanceTestEngine.R
@@ -9,7 +9,7 @@ f5f7265c3ea3126a3718f0b12951a445 *R/balanceTest.R
 36d2f607dd89f9dc82de767f2779636a *R/harmonic.R
 c4abaff11058ec66d658c006fe9c4451 *R/naImpute.R
 f24a226cde17083913e6d650240e093b *R/nuclearplants.R
-da2747012d51f4d05fe42bd22f8dd039 *R/plot.balancetest.R
+1dce27981dcebe746508e8c104154a2e *R/plot.balancetest.R
 f77b58ddb277af8253c5e2d54810753a *R/plot.xbal.R
 feca6ea980bd65fd66a78b2e841a5fb9 *R/print.xbal.R
 61cb3e099397d8714e5b03a60c87fc85 *R/ritools-package.R
@@ -28,7 +28,7 @@ c5884faacfad76a003c1ccc2115ac620 *R/xBalance.R
 2dc6f02def639bc2d8dcda4e11b73b68 *data/nuclearplants.rda
 ac646b60552ba9aae9818c69ff8b0090 *data/ym_long.rda
 2f242b9c192315e2e541b0bfbcdd9a51 *data/ym_short.rda
-2419155c14e56ca7ef66458e9abb59d4 *inst/CITATION
+309da0745e0a047a79b9a04b0284328a *inst/CITATION
 71171f0cfcd38c6771a867b132aeddc1 *inst/examples/balanceplot.R
 053e8e3cd60a0389187b9460f685fd85 *inst/examples/plot.xbal.R
 d7fa738aba494bc22b882250c7e7a957 *inst/extdata/ym_short_long.R
@@ -61,6 +61,7 @@ fd41af6bc1773a6dad1c44c59e425d37 *man/naImpute.Rd
 aac7827fecebd7e4557d0b37886f0b44 *man/plot.balancetest.Rd
 44a0faad2d4d9951128cc923998e56b7 *man/plot.xbal.Rd
 85bc9cac63c3b8ee90a6f23f445ead3e *man/print.xbal.Rd
+a3b1b3bbe7f789255c6debed8e154d54 *man/scale.DesignOptions.Rd
 d718e33c184dc95cfac44d2e21ae867d *man/sparseToVec.Rd
 846bf79f21aa2dc5f6f452bdbe797e76 *man/subset.xbal.Rd
 aa3736f8a4653f249af35b1c8319dd29 *man/tidy.xbal.Rd
@@ -72,7 +73,7 @@ aa3736f8a4653f249af35b1c8319dd29 *man/tidy.xbal.Rd
 3e13cb50ff76e1a7ec2ab1ac0a97e63e *man/ym_long.Rd
 83435119bc201a05c90aaba9801fa6ed *man/ym_short.Rd
 4153623bbe2ca0a86424ce06fad91347 *tests/testthat.R
-a6bfbb9c9fa2a338cc3de10bd72b29a0 *tests/testthat/test.Design.R
+54c9ae8ac5b59fd2c1850598e24a3d6e *tests/testthat/test.Design.R
 fe8c4ea336e04369d06f164ef7030591 *tests/testthat/test.balanceTest.R
 2cacafef03a57ec396bf8b3efb22b181 *tests/testthat/test.clusters.R
 106f9a778a89e99d0c4f2a3f71ae863b *tests/testthat/test.plot.balancetest.R
