@@ -1,6 +1,6 @@
-5afbe817d1818ef5ae3ed87365eb7403 *DESCRIPTION
+5942a2047f3205716879ae545754e489 *DESCRIPTION
 df17408ddc7319a20355321cda201532 *NAMESPACE
-a8688157a6b32a5c423017a07fb9f366 *NEWS.md
+6d86d16f077ef2a686217aeb7ea91709 *NEWS.md
 71b40a4d9dcd99084d1b206f36772c34 *R/Design.R
 f5f7265c3ea3126a3718f0b12951a445 *R/balanceTest.R
 51fe320581e125434b2aef7f9a64f07f *R/balanceTest.make.stratwts.R
@@ -21,7 +21,7 @@ c5884faacfad76a003c1ccc2115ac620 *R/xBalance.R
 9bb2a0d86bb5f458d41045b042b734ab *R/xBalance.makepooledsd.R
 68029b55ccfb278f6789f7171187fbf4 *R/xBalanceEngine.R
 99237bf1b9b43f99c19e4ab7c1283bcd *R/xbal_tidiers.R
-52052dc9a58564e07fdaef74017d7e0e *R/xtable.xbal.R
+a8bd7f94262ed33513b4a0ef7b723304 *R/xtable.xbal.R
 1f8ace4cddecede3927b6611a1a75d82 *R/ym_long.R
 8f27cc57d2a0d817d3a90f92217adcc0 *R/ym_short.R
 92f467308cb36eeb6e549ed996749f5d *README.md
@@ -69,15 +69,15 @@ aa3736f8a4653f249af35b1c8319dd29 *man/tidy.xbal.Rd
 08a58b41ced257414c60137b8cffd5b9 *man/xBalance.Rd
 31c96aadac3fceb1b4639dac9713e998 *man/xBalance.find.goodstrats.Rd
 540b0eb4537251f1394cd03ceeeb7ae6 *man/xBalance.makepooledsd.Rd
-8c8c202eed6275d4f50ce4ef69933cac *man/xtable.xbal.Rd
+7b700f33ae2d30014cc9ac2d4678c6cc *man/xtable.xbal.Rd
 3e13cb50ff76e1a7ec2ab1ac0a97e63e *man/ym_long.Rd
 83435119bc201a05c90aaba9801fa6ed *man/ym_short.Rd
 4153623bbe2ca0a86424ce06fad91347 *tests/testthat.R
 54c9ae8ac5b59fd2c1850598e24a3d6e *tests/testthat/test.Design.R
 fe8c4ea336e04369d06f164ef7030591 *tests/testthat/test.balanceTest.R
 2cacafef03a57ec396bf8b3efb22b181 *tests/testthat/test.clusters.R
-106f9a778a89e99d0c4f2a3f71ae863b *tests/testthat/test.plot.balancetest.R
-bf438087f1feaaf79c376527502c71b7 *tests/testthat/test.plot.xbal.R
+89b0749603a5ca2339191d1ab56806a6 *tests/testthat/test.plot.balancetest.R
+68887cfc02423fca1f4b2bed12c5f46e *tests/testthat/test.plot.xbal.R
 b28b96367b937a1fa1bec18f65c39fec *tests/testthat/test.utils.R
 c277c8b46e13795f8bbfcb3aff9da267 *tests/testthat/test.xBalance.R
 e54e55431d95fbea16510e8c40a5f709 *tests/xBalanceTests2.R
