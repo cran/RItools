@@ -1,7 +1,7 @@
-5942a2047f3205716879ae545754e489 *DESCRIPTION
-df17408ddc7319a20355321cda201532 *NAMESPACE
-6d86d16f077ef2a686217aeb7ea91709 *NEWS.md
-71b40a4d9dcd99084d1b206f36772c34 *R/Design.R
+841faa1771d77522bbb030ec126e8c5f *DESCRIPTION
+ae454326a78d69b240747356e8f2cfc9 *NAMESPACE
+dac33093fd6ba2a88374686fa997cbc8 *NEWS.md
+d0af971cfd84aef2b91f423a586b25eb *R/Design.R
 f5f7265c3ea3126a3718f0b12951a445 *R/balanceTest.R
 51fe320581e125434b2aef7f9a64f07f *R/balanceTest.make.stratwts.R
 0b52c14ca1ec44e648109c546e493f3d *R/balanceTestEngine.R
@@ -13,7 +13,7 @@ f24a226cde17083913e6d650240e093b *R/nuclearplants.R
 f77b58ddb277af8253c5e2d54810753a *R/plot.xbal.R
 feca6ea980bd65fd66a78b2e841a5fb9 *R/print.xbal.R
 61cb3e099397d8714e5b03a60c87fc85 *R/ritools-package.R
-82ff0e3e15ece732e5cc20f3f31bbe3e *R/utils.R
+f16cd16d574d07898b99d34821c97c11 *R/utils.R
 c5884faacfad76a003c1ccc2115ac620 *R/xBalance.R
 5df0c6992d5450f064aff8c586e40988 *R/xBalance.find.goodstrats.R
 440ebaaaa6ad7142669ad4b830d39d01 *R/xBalance.make.stratwts.old.R
@@ -24,7 +24,7 @@ c5884faacfad76a003c1ccc2115ac620 *R/xBalance.R
 a8bd7f94262ed33513b4a0ef7b723304 *R/xtable.xbal.R
 1f8ace4cddecede3927b6611a1a75d82 *R/ym_long.R
 8f27cc57d2a0d817d3a90f92217adcc0 *R/ym_short.R
-92f467308cb36eeb6e549ed996749f5d *README.md
+e06f832b16c8d25c2d15cc0d1685a46c *README.md
 2dc6f02def639bc2d8dcda4e11b73b68 *data/nuclearplants.rda
 ac646b60552ba9aae9818c69ff8b0090 *data/ym_long.rda
 2f242b9c192315e2e541b0bfbcdd9a51 *data/ym_short.rda
@@ -32,9 +32,9 @@ ac646b60552ba9aae9818c69ff8b0090 *data/ym_long.rda
 71171f0cfcd38c6771a867b132aeddc1 *inst/examples/balanceplot.R
 053e8e3cd60a0389187b9460f685fd85 *inst/examples/plot.xbal.R
 d7fa738aba494bc22b882250c7e7a957 *inst/extdata/ym_short_long.R
-de2115af7bda1f50b592d5d21a69a810 *man/CovsAlignedToADesign-class.Rd
+acf7ac6c559a0e6469f46ea0a7cc2b7b *man/CovsAlignedToADesign-class.Rd
 42cef06a4fb8380099019bf129e4ae84 *man/DesignOptions-class.Rd
-9b10cf0e78e070ada134fad51dbfe04e *man/DesignWeights.Rd
+5e5f0411f73bf884517565a41afebe68 *man/DesignWeights.Rd
 ee58a6bcafc241fecdc63d231c810710 *man/HB08.Rd
 bb5116b0d597c69bc8278b9aa7fec2f7 *man/HB08_2016.Rd
 dc892f71ad8bffbf2b379838a84cea9a *man/ModelMatrixPlus-class.Rd
@@ -78,7 +78,7 @@ fe8c4ea336e04369d06f164ef7030591 *tests/testthat/test.balanceTest.R
 2cacafef03a57ec396bf8b3efb22b181 *tests/testthat/test.clusters.R
 89b0749603a5ca2339191d1ab56806a6 *tests/testthat/test.plot.balancetest.R
 68887cfc02423fca1f4b2bed12c5f46e *tests/testthat/test.plot.xbal.R
-b28b96367b937a1fa1bec18f65c39fec *tests/testthat/test.utils.R
+d4fa5437a4eb7bb9f766121e957ff154 *tests/testthat/test.utils.R
 c277c8b46e13795f8bbfcb3aff9da267 *tests/testthat/test.xBalance.R
 e54e55431d95fbea16510e8c40a5f709 *tests/xBalanceTests2.R
 00958ef37f4277034a5b6021c505d4bb *tests/xBalanceTests2.Rout.save
