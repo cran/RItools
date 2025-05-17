@@ -217,7 +217,7 @@ setClass("DesignOptions",
 ##' @param fmla Formula
 ##' @param data Data
 ##' @return DesignOptions
-##' @import stats
+##' @import stats survival
 ##' @keywords internal
 ##'
 makeDesigns <- function(fmla, data) {
@@ -247,26 +247,18 @@ makeDesigns <- function(fmla, data) {
   vnames <- rownames(attr(ts, "factors"))
   treatment.name <- vnames[attr(ts, "response")]
   str.vnames <- vnames[c(attr(ts, "specials")$cluster, attr(ts, "specials")$strata)]
-  # Following resolution to #86 in [master ad6ed6a], we have to indicate specifically
-  # that `cluster` and `strata` are to be found in the survival package.
-  str.vnames.safe <- gsub('(?<!:)cluster\\(', 'survival::cluster\\(', str.vnames, perl=TRUE)
-  str.vnames.safe <- gsub('(?<!:)strata\\(', 'survival::strata\\(', str.vnames.safe, perl=TRUE)
-  # The purposes of the regexp lookbehinds (`(?<!:)`) above are to avoid overwriting
-  # "survival::cluster(" with "survival::survival::cluster(", and also to avoid
-  # overruling users who prefer to get their `cluster()` or `strata()` from elsewhere
-  # than the survival package.
 
-  str.fmla <- formula(paste0("factor(", treatment.name, ")", " ~ ", paste0(collapse = "+", c(1, str.vnames.safe))),
+  str.fmla <- formula(paste0("factor(", treatment.name, ")", " ~ ", paste0(collapse = "+", c(1, str.vnames))),
                       env=environment(fmla))
   str.tms  <- terms(str.fmla, data = data,
-                    specials = c("survival::cluster", "survival::strata"))
+                    specials = c("cluster", "strata"))
   str.data <- model.frame(str.tms, data = data, na.action = na.pass, drop.unused.levels=TRUE)
 
 
   ## check that strata and clusters have the proper relationships with treatment assignment
   treatmentCol <- colnames(str.data)[attr(str.tms, "response")]
-  clusterCol <- colnames(str.data)[attr(str.tms, "specials")$`survival::cluster`]
-  strataCols <- colnames(str.data)[attr(str.tms, "specials")$`survival::strata`]
+  clusterCol <- colnames(str.data)[attr(str.tms, "specials")$cluster]
+  strataCols <- colnames(str.data)[attr(str.tms, "specials")$strata]
 
   if (includeUnstratified) {
     str.data$`--` <- 1
@@ -326,6 +318,12 @@ makeDesigns <- function(fmla, data) {
   data.data <- model.frame(data.fmla, data, na.action = na.pass) #
   data.data$'(weights)' <- data$'(weights)'
   
+  # Convert remaining character columns to factors so make behavior consistent (issue #127)
+  chrs <- colnames(data.data)[sapply(data.data, is.character)]
+  for (f in chrs) {
+    data.data[, f] <- as.factor(data.data[, f])
+  }
+  
   # knock out any levels that are not used
   fcts <- colnames(data.data)[sapply(data.data, is.factor)]
   for (f in fcts) {
@@ -353,7 +351,7 @@ makeDesigns <- function(fmla, data) {
 
   Z <- str.data[, treatmentCol]
   tmp <- str.data[, strataCols, drop = FALSE]
-  colnames(tmp) <- gsub(colnames(tmp), pattern = "survival::strata\\((.*)\\)", replacement = "\\1")
+  colnames(tmp) <- gsub(colnames(tmp), pattern = "strata\\((.*)\\)", replacement = "\\1")
   strata.frame <- data.frame(lapply(tmp, factor), check.names = FALSE)
 
   return(new("DesignOptions",
@@ -688,11 +686,10 @@ aggregateDesigns <- function(design) {
   # To align w/ this `C_transp`, everything to be returned 
   # needs to align w/ `levels(Cluster)`, not with 
   # `Cluster` itself. So,
-  Z <- Z[levels(Cluster)]
-  Cluster  <- as.factor(levels(Cluster))
-  StrataFrame  <-
-      StrataFrame[match(levels(Cluster), as.character(Cluster)),
-                  , drop=FALSE]
+  cperm <- match(levels(Cluster), as.character(Cluster))
+  Z <- Z[cperm]
+  StrataFrame  <- StrataFrame[cperm, , drop=FALSE]
+  Cluster <- Cluster[cperm]
   
   unit.weights <- as.matrix(C_transp %*% as.matrix(design@UnitWeights))
 
@@ -892,7 +889,7 @@ alignDesignsByStrata <- function(a_stratification, design, post.align.transform 
     ## Do this for the not-missing indicators as well as for the manifest variables.
     covars <- cbind(Covs_w_touchups, 0+NM[,NMcolperm])    
     covars <- suppressWarnings(
-        slm.fit.csr.fixed(S, covars*non_null_record_wts)$residuals
+        slm_fit_csr(S, covars*non_null_record_wts)$residuals
     )
     colnames(covars) <- vars
 
